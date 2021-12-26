@@ -3,12 +3,13 @@ import {feedRules} from "../utils/rules";
 import {validateRequest, verifyToken} from "../middlewares";
 import {createPostController, getPostsController, getPostByIdController} from "../controllers";
 
-const router = express.Router();
+const feedRouter = express.Router({mergeParams: true});
 
-router.post('/api/post', verifyToken, feedRules.forCreatePost, validateRequest, createPostController)
+feedRouter.get('/posts', verifyToken, getPostsController)
 
-router.get('/api/posts', verifyToken, getPostsController)
+feedRouter.get('/posts/:postId', verifyToken, getPostByIdController)
 
-router.get('/api/posts/:postId', verifyToken, getPostByIdController)
+feedRouter.post('/post', verifyToken, feedRules.forCreatePost, validateRequest, createPostController)
 
-export {router as postRouter};
+
+export {feedRouter}

@@ -74,6 +74,7 @@ export default class AuthService {
   }
 
   checkAccessToken(token: string): JwtPayload | string {
+    /** TBD: Catch jwt expired error */
     return jwt.verify(token, this.secret as string)
   }
 

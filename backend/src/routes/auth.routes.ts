@@ -4,12 +4,12 @@ import {userRules} from "../utils/rules";
 import {refreshTokenController, signInController} from "../controllers";
 import {validateRequest} from "../middlewares";
 
-const router = express.Router();
+const authRouter = express.Router();
 
-router.post("/auth/signup", userRules.forSignup, validateRequest, signUpController)
+authRouter.post("/signup", userRules.forSignup, validateRequest, signUpController)
 
-router.post("/auth/signin", userRules.forSignin, validateRequest, signInController)
+authRouter.post("/signin", userRules.forSignin, validateRequest, signInController)
 
-router.post("/auth/refreshToken", userRules.forRefreshToken, validateRequest, refreshTokenController)
+authRouter.post("/refreshToken", userRules.forRefreshToken, validateRequest, refreshTokenController)
 
-export { router as authRouter };
+export {authRouter};
