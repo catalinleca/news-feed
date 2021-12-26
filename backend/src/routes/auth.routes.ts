@@ -1,8 +1,8 @@
 import express from "express";
 import {signUpController} from "../controllers";
 import {userRules} from "../utils/rules";
-import {refreshTokenController, signInController} from "../controllers/auth.controller";
-import {validateRequest} from "../middlewares/validateRequest";
+import {refreshTokenController, signInController} from "../controllers";
+import {validateRequest} from "../middlewares";
 
 const router = express.Router();
 

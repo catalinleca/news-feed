@@ -53,7 +53,7 @@ export default class UserService extends BaseService {
     const authService = new AuthService();
 
     const accessToken = authService.signAccessToken({
-      id: user.id,
+      userId: user.id,
       email: user.email
     })
     const refreshToken = await authService.createRefreshToken(user);

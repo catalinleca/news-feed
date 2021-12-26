@@ -3,9 +3,9 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import sequelize from "./utils/db";
 import createAssociations from "./utils/associations";
-import {authRouter} from "./routes";
+import {authRouter, postRouter} from "./routes";
 import "dotenv/config";
-import {errorHandler} from "./middlewares/errorHandler";
+import {errorHandler} from "./middlewares";
 
 const app = express();
 
@@ -14,6 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cors())
 
 app.use("/", authRouter);
+app.use("/", postRouter);
 
 app.get('/', (req, res) => {
   res.send('Well done!');

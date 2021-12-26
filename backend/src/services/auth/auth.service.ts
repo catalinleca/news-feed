@@ -1,13 +1,13 @@
-import jwt from "jsonwebtoken";
+import jwt, {JwtPayload} from "jsonwebtoken";
 import User from "../../models/User";
 import {v4 as uuidv4} from "uuid";
 import RefreshToken from "../../models/RefreshToken";
 import {InvalidCredentialsError} from "../../utils/errors";
 import {BadRequestError} from "../../utils/errors/badRequestError";
-import exp from "constants";
 
-interface IAccessTokenPayload {
-  [key: string]: any
+export interface IAccessTokenPayload {
+  userId: number;
+  email: string;
 }
 
 export default class AuthService {
@@ -22,7 +22,6 @@ export default class AuthService {
 
   async createRefreshToken(user: User) {
     const expiredAt = new Date(new Date().getTime() + 900000);
-    console.log(expiredAt)
     let _token = uuidv4();
 
     /** TBD: Might use user.createRefreshToken from associations */
@@ -73,4 +72,9 @@ export default class AuthService {
       refreshToken: refreshToken
     }
   }
+
+  checkAccessToken(token: string): JwtPayload | string {
+    return jwt.verify(token, this.secret as string)
+  }
+
 }
