@@ -1,14 +1,18 @@
 import {UserAttributes} from "../../../models/User";
 
 type protectedProperties = "password";
-type getUserDto = Omit<UserAttributes, protectedProperties>
+export interface GetUserDto extends Omit<UserAttributes, protectedProperties> {}
+export interface LoginUserDto {
+  email: string,
+  password: string
+}
 
-export const userDto = (user: UserAttributes): getUserDto => {
+export const getUserDto = (user: UserAttributes): GetUserDto => {
   const userData: Partial<UserAttributes> = {
     ...user
   }
 
   delete userData.password;
 
-  return userData as getUserDto;
+  return userData as GetUserDto;
 }

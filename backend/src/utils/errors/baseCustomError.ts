@@ -5,7 +5,8 @@ export abstract class BaseCustomError extends Error {
     super(message);
     this.name = this.constructor.name;
 
-    Error.captureStackTrace(this, this.constructor);
+    Object.setPrototypeOf(this, new.target.prototype)
+    Error.captureStackTrace(this)
   }
 
   abstract getErrors(): { message: string, field?: string}[];

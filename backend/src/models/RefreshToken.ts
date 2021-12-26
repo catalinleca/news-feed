@@ -1,16 +1,20 @@
-import {Model, Association, DataTypes} from "sequelize";
-import {v4 as uuidv4} from "uuid";
+import {Model, Association, DataTypes, Optional, HasOneGetAssociationMixin} from "sequelize";
 import User from "./User";
 import sequelize from "../utils/db";
 import "dotenv/config";
 
 export interface RefreshTokenAttributes {
+  id: number;
   token: string;
   expiryDate: Date;
   userId: number;
 }
 
-class RefreshToken extends Model<RefreshTokenAttributes> implements RefreshTokenAttributes {
+export interface RefreshTokenCreationAttributes extends Optional<RefreshTokenAttributes, "id"> {
+}
+
+class RefreshToken extends Model<RefreshTokenAttributes, RefreshTokenCreationAttributes> implements RefreshTokenAttributes {
+  public id!: number;
   public token!: string;
   public expiryDate!: Date;
   public userId!: number;
@@ -19,31 +23,23 @@ class RefreshToken extends Model<RefreshTokenAttributes> implements RefreshToken
     user: Association<RefreshToken, User>
   }
 
-  async createToken(user: User) {
-    let expiredAt = new Date();
+  public getUser!: HasOneGetAssociationMixin<User>
 
-    expiredAt.setSeconds(expiredAt.getSeconds() + +!process.env.JWT_REFRESH_EXPIRATION_DATE)
-
-    let _token = uuidv4();
-
-    const refreshToken = await RefreshToken.create({
-      token: _token,
-      userId: user.id,
-      expiryDate: expiredAt
-    })
-
-    return refreshToken.token;
-  }
-
-  verifyExpiration(token: RefreshToken) {
+  static isExpired(token: RefreshToken): boolean {
     return token.expiryDate.getTime() < new Date().getTime();
   }
+
 }
 
 RefreshToken.init({
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
   token: {
     type: new DataTypes.STRING(128),
-    primaryKey: true,
+    allowNull: true,
   },
   expiryDate: {
     type: DataTypes.DATE,

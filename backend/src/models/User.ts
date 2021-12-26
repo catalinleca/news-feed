@@ -16,6 +16,7 @@ import Address from "./Address";
 import Company from "./Company";
 import Comment from "./Comment";
 import Post from "./Post";
+import RefreshToken from "./RefreshToken";
 
 export interface UserAttributes {
   id: number;
@@ -62,16 +63,20 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public hasComment!: HasManyHasAssociationMixin<Comment, number>;
   public countComments!: HasManyCountAssociationsMixin;
 
+  public createRefreshToken!: HasOneCreateAssociationMixin<RefreshToken>;
+
   public readonly address?: Address;
   public readonly company?: Company;
   public readonly posts?: Post;
   public readonly comments?: Company;
+  public readonly refreshToken?: RefreshToken;
 
   public static associations: {
     address: Association<User, Address>
     company: Association<User, Company>
     posts: Association<User, Post>
     comments: Association<User, Comment>
+    refreshToken: Association<User, RefreshToken>
   }
 }
 

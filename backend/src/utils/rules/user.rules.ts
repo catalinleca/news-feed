@@ -44,7 +44,15 @@ export const userRules = {
     ...addressRules.createAddress
   ],
   forSignin: [
-
+    check("email")
+      .trim()
+      .normalizeEmail()
+      .isEmail().withMessage("Invalid email format!")
+      .notEmpty()
+      .withMessage("Email must be provided!"),
+    check("password")
+      .notEmpty()
+      .withMessage("Password must be provided!")
   ],
   forRefreshToken: [
     check("refreshToken")
