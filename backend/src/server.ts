@@ -3,10 +3,11 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import sequelize from "./utils/db";
 import createAssociations from "./utils/associations";
-import {authRouter, feedRouter} from "./routes";
+import {authRouter, postRouter} from "./routes";
 import "dotenv/config";
 import {errorHandler} from "./middlewares";
 import {userRouter} from "./routes/user.routes";
+import {commentRouter} from "./routes/comment.routes";
 
 const app = express();
 
@@ -15,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cors())
 
 app.use("/auth", authRouter);
-app.use("/api", feedRouter);
+app.use("/api", postRouter);
 app.use("/api", userRouter);
 
 app.get('/', (req, res) => {

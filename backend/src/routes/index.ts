@@ -1,2 +1,2 @@
 export {authRouter} from "./auth.routes";
-export {feedRouter} from "./feed.routes";
+export {postRouter} from "./post.routes";

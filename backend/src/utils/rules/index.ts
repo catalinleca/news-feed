@@ -1,2 +1,2 @@
 export {userRules} from "./user.rules";
-export {feedRules} from "./feedRules";
+export {postRules} from "./post.rules";
