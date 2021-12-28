@@ -1,6 +1,6 @@
 import BaseCrudClient from "../base/baseCrudClient";
-import {AxiosInstance} from "axios";
 import {BaseInterface} from "../base";
+import {AxiosInstance} from "axios";
 
 interface IPost extends BaseInterface {
   id: number;

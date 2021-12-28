@@ -1,5 +1,6 @@
-import {AxiosInstance, AxiosRequestConfig} from "axios";
+import {AxiosRequestConfig} from "axios";
 import AppClient from "./index";
+import jwt from "jsonwebtoken";
 
 export interface IAuthTokens {
   accessToken: string;
@@ -36,10 +37,57 @@ const getLocalRefreshToken = () => {
   return
 };
 
+const isTokenExpired = (token: string): boolean => {
+  if (!token) return true;
+
+  const decoded = jwt.decode(token) as { [key: string]: any }
+  if (!decoded || !decoded.exp) return true;
+
+  const tokenExpDate = decoded.exp
+  const expiresIn = tokenExpDate - Date.now() / 1000
+
+  return !expiresIn || expiresIn < 0;
+}
+
+const getLocalTokens = (type?: "access" | "refresh") => {
+  enum tokenTypes {
+    access = "accessToken",
+    refresh = "refreshToken"
+  }
+
+  const currentTokenType = type ? tokenTypes[type] : null;
+
+  const rawTokens = sessionStorage.getItem(SESSION_KEY);
+
+  if (!rawTokens) return
+
+  try {
+    const jsonTokens = JSON.parse(rawTokens)
+    return currentTokenType
+      ? jsonTokens?.[currentTokenType]
+      : jsonTokens
+  } catch (err) {
+    console.error('Failed to parse authTokens: ', err);
+  }
+
+  return {}
+}
+
 const setAuthTokens = (tokens: IAuthTokens) =>
   sessionStorage.setItem(SESSION_KEY, JSON.stringify(tokens))
 
 const logout = () => sessionStorage.removeItem(SESSION_KEY);
+
+const isLoginValid = (): boolean => {
+  const tokens = getLocalTokens() as IAuthTokens
+
+  if (!tokens) return false
+
+  const {accessToken, refreshToken} = tokens;
+  const isAnyTokenInvalid = isTokenExpired(accessToken) || !refreshToken
+
+  return !isAnyTokenInvalid;
+}
 
 const requestFulfilledAuthInterceptor = ({
                                            header = "authorization",
@@ -85,7 +133,9 @@ const JwtService = {
   setAuthTokens,
   logout,
   requestFulfilledAuthInterceptor,
-  responseRejectedAuthInterceptor
+  responseRejectedAuthInterceptor,
+  isTokenExpired,
+  isLoginValid
 }
 
 export default JwtService
