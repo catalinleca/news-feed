@@ -1,6 +1,11 @@
 import {AxiosInstance} from "axios";
 import {SchemaObject} from "ajv";
 
+export interface BaseInterface {
+  createdAt: string
+  updatedAt: string
+}
+
 export default class BaseClient {
   private urlAppender: string
 

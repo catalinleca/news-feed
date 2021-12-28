@@ -27,7 +27,7 @@ export default class BaseCrudClient<dataType>
   extends BaseClient
   implements IBaseCrudClient<dataType> {
 
-  constructor(instance: AxiosInstance, url: string, jsonSchema: SchemaObject) {
+  constructor(instance: AxiosInstance, url: string, jsonSchema?: SchemaObject) {
     super(instance, url, jsonSchema)
   }
 

@@ -31,6 +31,9 @@ export default class AppClient implements IAppClient {
   constructor(config?: AxiosRequestConfig) {
     this.instance = axios.create({
       timeout: 3000,
+      headers: {
+        "Content-Type": "application/json"
+      },
       ...config
     })
 

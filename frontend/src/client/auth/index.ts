@@ -27,7 +27,8 @@ interface IRegisterBusiness {
   address: IAddress
 }
 
-interface IRegister extends IRegisterBusiness, IRegisterCredentials{}
+interface IRegister extends IRegisterBusiness, IRegisterCredentials {
+}
 
 const authSchema = {
   $id: "#Auth",
@@ -51,18 +52,35 @@ const registerSchema = {}
 const credentialsSchema = {
   type: "object",
   properties: {
-    email: { type: "string" },
-    password: { type: "integer" }
+    email: {type: "string"},
+    password: {type: "integer"}
   },
   required: ["email", "password"]
 };
 
 const LOGIN_URL = "/signin"
 const REGISTER_URL = "/signup"
+const REFRESH_TOKEN_URL = "/refreshToken"
 
 export default class AuthClient extends BaseClient {
   constructor(instance: AxiosInstance) {
     super(instance, "auth")
+  }
+
+  requestAccessTokens = async (refreshToken: string): Promise<IAuthTokens> => {
+    if (!refreshToken) {
+      throw new Error("refreshToken required to get new access token!")
+    }
+
+    const response = await this.instance.post<IAuthTokens>(
+      `/${this.getUrl()}/${REFRESH_TOKEN_URL}`, {
+        refreshToken
+      }
+    )
+
+    this.validate(response.data, "requestAccessTokens", "response", authSchema);
+
+    return response.data;
   }
 
   login = async (credentials: ICredentials, config?: AxiosRequestConfig) => {
