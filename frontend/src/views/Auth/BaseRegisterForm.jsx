@@ -22,7 +22,9 @@ export const baseFormValidationSchema = {
       Yup.ref('password'), null
     ], "Password must match")
 }
-
+/**
+ * get rid of all the typographies at the end
+ */
 const BaseRegisterForm = ({useFormProps: {register, errors}}) => (
   <React.Fragment>
     <Grid

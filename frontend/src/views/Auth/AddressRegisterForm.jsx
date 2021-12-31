@@ -3,31 +3,20 @@ import * as Yup from "yup";
 import {Grid, TextField, Typography} from "@mui/material";
 
 export const baseFormValidationSchema = {
-  username: Yup.string()
-    .required('Username is required')
-    .min(6, 'Username must be at least 6 characters')
-    .max(20, 'Username must not exceed 20 characters'),
-  email: Yup.string()
-    .required('Email is required')
-    .email('Email is invalid'),
-  password: Yup.string()
-    .required('Password is required')
-    .min(8, 'Password must be at least 8 characters')
-    .max(40, 'Password must not exceed 40 characters'),
-  confirmPassword: Yup.string()
-    .required('Password is required')
-    .min(8, 'Password must be at least 8 characters')
-    .max(40, 'Password must not exceed 40 characters')
-    .oneOf([
-      Yup.ref('password'), null
-    ], "Password must match")
+  street: Yup.string()
+    .required('Street is required')
+    .min(6, 'Street must be at least 6 characters')
+    .max(40, 'Street must not exceed 20 characters'),
+  city: Yup.string()
+    .required('City is required')
+    .email('City is invalid'),
+  suite: Yup.number()
+    .typeError('Suite is required')
+    .required('Suite is required'),
 }
 
 const AddressRegisterForm = ({useFormProps: {register, control, errors}}) => (
   <React.Fragment>
-    <Typography variant="h6" align="center" margin="dense">
-      Login
-    </Typography>
     <Grid
       container
       item={true}
@@ -43,64 +32,56 @@ const AddressRegisterForm = ({useFormProps: {register, control, errors}}) => (
         <Grid item xs={12}>
           <TextField
             required
-            id="username"
-            name="username"
-            label="username"
+            id="street"
+            name="street"
+            label="Street"
             fullWidth
             margin="dense"
-            {...register('username')}
-            error={!!errors.username}
+            {...register('street')}
+            error={!!errors.street}
           />
           <Typography variant="inherit" color="textSecondary">
-            {errors.username?.message}
+            {errors.street?.message}
           </Typography>
         </Grid>
-        <Grid item xs={12}>
-          <TextField
-            required
-            id="email"
-            name="email"
-            label="Email"
-            fullWidth
-            margin="dense"
-            {...register('email')}
-            error={!!errors.email}
-          />
-          <Typography variant="inherit" color="textSecondary">
-            {errors.email?.message}
-          </Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            required
-            id="password"
-            name="password"
-            label="Password"
-            type="password"
-            fullWidth
-            margin="dense"
-            {...register('password')}
-            error={!!errors.password}
-          />
-          <Typography variant="inherit" color="textSecondary">
-            {errors.password?.message}
-          </Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            required
-            id="confirmPassword"
-            name="confirmPassword"
-            label="Confirm Password"
-            type="password"
-            fullWidth
-            margin="dense"
-            {...register('confirmPassword')}
-            error={!!errors.confirmPassword}
-          />
-          <Typography variant="inherit" color="textSecondary">
-            {errors.confirmPassword?.message}
-          </Typography>
+        <Grid
+          container={true}
+          item={true}
+          xs={12}
+          justifyContent="center"
+          spacing={1}
+        >
+          <Grid item xs={6}>
+            <TextField
+              required
+              id="city"
+              name="city"
+              label="City"
+              fullWidth
+              margin="dense"
+              {...register('city')}
+              error={!!errors.city}
+            />
+            <Typography variant="inherit" color="textSecondary">
+              {errors.city?.message}
+            </Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              required
+              id="suite"
+              name="suite"
+              label="Suite"
+              type="suite"
+              fullWidth
+              margin="dense"
+              {...register('suite')}
+              error={!!errors.suite}
+            />
+            <Typography variant="inherit" color="textSecondary">
+              {errors.suite?.message}
+            </Typography>
+          </Grid>
         </Grid>
       </Grid>
     </Grid>

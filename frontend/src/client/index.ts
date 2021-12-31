@@ -1,5 +1,6 @@
 import AuthClient from "./auth";
 import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse} from "axios";
+import PostsClient from "./posts";
 
 interface IAppClient {
   readonly auth: AuthClient;
@@ -27,6 +28,7 @@ type responseInterceptors = {
 export default class AppClient implements IAppClient {
   public readonly instance: AxiosInstance;
   public auth: AuthClient;
+  public posts: PostsClient
 
   constructor(config?: AxiosRequestConfig) {
     this.instance = axios.create({
@@ -38,6 +40,7 @@ export default class AppClient implements IAppClient {
     })
 
     this.auth = new AuthClient(this.instance);
+    this.posts = new PostsClient(this.instance);
   }
 
   addInterceptor = (

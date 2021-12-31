@@ -4,10 +4,15 @@ import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {Box, Button, Grid, Paper, TextField, Typography} from "@mui/material";
 import BaseRegisterForm, {baseFormValidationSchema} from "./BaseRegisterForm";
-import UserDetailsRegisterForm from "./UserDetailsRegisterForm";
+import UserDetailsRegisterForm, {userDetailsValidationSchema} from "./UserDetailsRegisterForm";
+import {useEffect, useState} from "react";
+import AddressRegisterForm from "./AddressRegisterForm";
+import appClient from "../../client/appClient";
+import AuthButton from "../../components/AuthButton";
 
 const validationSchema = Yup.object().shape({
-  ...baseFormValidationSchema
+  ...baseFormValidationSchema,
+  ...userDetailsValidationSchema
 })
 
 const RegisterPage = () => {
@@ -15,12 +20,27 @@ const RegisterPage = () => {
     register,
     control,
     handleSubmit,
-    formState: {errors}
+    formState: {errors},
+    setValue
   } = useForm({
-    resolver: yupResolver(validationSchema)
+    resolver: yupResolver(validationSchema),
   });
+  const [errorsMessages, setErrorsMessages] = useState([])
 
-  const onSubmit = data => {
+  useEffect(() => {
+    const fetchData = async () => {
+      // const appClient = defaultAppFactory(
+      //   "http://localhost:3001"
+      // )
+
+      const result = await appClient.posts.getAll()
+      console.log("result: ", result);
+    }
+
+    // fetchData();
+  }, [register])
+
+  const handleRegister = data => {
     console.log(data)
   }
 
@@ -29,7 +49,7 @@ const RegisterPage = () => {
       <Paper>
         <Box px={3} py={2} mt={3}>
           <Typography variant="h6" align="center" margin="dense">
-            Login
+            Register
           </Typography>
           <BaseRegisterForm
             useFormProps={{
@@ -42,17 +62,23 @@ const RegisterPage = () => {
             useFormProps={{
               register,
               control,
-              errors
+              errors,
+              setValue
+            }}
+          />
+          <AddressRegisterForm
+            useFormProps={{
+              register,
+              control,
+              errors,
             }}
           />
           <Grid mt={3} container={true} justifyContent="center">
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleSubmit(onSubmit)}
-            >
-              Register
-            </Button>
+            <AuthButton
+              label="Register"
+              errors={errorsMessages}
+              clickHandler={handleSubmit(handleRegister)}
+            />
           </Grid>
         </Box>
       </Paper>

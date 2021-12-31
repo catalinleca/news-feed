@@ -10,7 +10,7 @@ export interface IAuthTokens {
 export const SESSION_KEY = "app-auth";
 
 const getLocalAccessToken = () => {
-  const rawTokens = sessionStorage.getItem(SESSION_KEY);
+  const rawTokens = localStorage.getItem(SESSION_KEY);
 
   if (!rawTokens) return
 
@@ -24,7 +24,7 @@ const getLocalAccessToken = () => {
 };
 
 const getLocalRefreshToken = () => {
-  const rawTokens = sessionStorage.getItem(SESSION_KEY);
+  const rawTokens = localStorage.getItem(SESSION_KEY);
 
   if (!rawTokens) return
 
@@ -37,6 +37,16 @@ const getLocalRefreshToken = () => {
   return
 };
 
+const decodeToken = (token: string) => {
+  const decoded = jwt.decode(token) as { [key: string]: any }
+  if (!decoded) return;
+
+  return {
+    userId: decoded.userId,
+    email: decoded.email
+  }
+
+}
 const isTokenExpired = (token: string): boolean => {
   if (!token) return true;
 
@@ -57,7 +67,7 @@ const getLocalTokens = (type?: "access" | "refresh") => {
 
   const currentTokenType = type ? tokenTypes[type] : null;
 
-  const rawTokens = sessionStorage.getItem(SESSION_KEY);
+  const rawTokens = localStorage.getItem(SESSION_KEY);
 
   if (!rawTokens) return
 
@@ -74,9 +84,9 @@ const getLocalTokens = (type?: "access" | "refresh") => {
 }
 
 const setAuthTokens = (tokens: IAuthTokens) =>
-  sessionStorage.setItem(SESSION_KEY, JSON.stringify(tokens))
+  localStorage.setItem(SESSION_KEY, JSON.stringify(tokens))
 
-const logout = () => sessionStorage.removeItem(SESSION_KEY);
+const logout = () => localStorage.removeItem(SESSION_KEY);
 
 const isLoginValid = (): boolean => {
   const tokens = getLocalTokens() as IAuthTokens
@@ -84,58 +94,19 @@ const isLoginValid = (): boolean => {
   if (!tokens) return false
 
   const {accessToken, refreshToken} = tokens;
-  const isAnyTokenInvalid = isTokenExpired(accessToken) || !refreshToken
+  const isAnyTokenInvalid = !accessToken || !refreshToken
 
   return !isAnyTokenInvalid;
-}
-
-const requestFulfilledAuthInterceptor = ({
-                                           header = "authorization",
-                                           headerPrefix = "Bearer",
-                                         } = {}) =>
-  (reqConfig: AxiosRequestConfig): AxiosRequestConfig => {
-    const accessToken = getLocalAccessToken()
-    if (accessToken) {
-      reqConfig.headers![header] = [headerPrefix, accessToken].join(" ")
-    }
-
-    return reqConfig
-  }
-
-const responseRejectedAuthInterceptor = ({
-                                           appClient
-                                         }: {
-  appClient: AppClient
-}) => async (err: any) => {
-  const originalConfig = err.config;
-
-  if (originalConfig !== "/auth/signin" && err.response) {
-    if (err.response.status === 401 && !originalConfig._retry) {
-      originalConfig._retry = true;
-
-      try {
-        const accessTokens: IAuthTokens = await appClient.auth.requestAccessTokens(JwtService.getLocalRefreshToken())
-
-        JwtService.setAuthTokens(accessTokens)
-
-        return appClient.instance(originalConfig)
-      } catch (error) {
-        return Promise.reject(error)
-      }
-    }
-  }
-
-  return Promise.reject(err)
 }
 
 const JwtService = {
   getLocalRefreshToken,
   setAuthTokens,
   logout,
-  requestFulfilledAuthInterceptor,
-  responseRejectedAuthInterceptor,
+  getLocalAccessToken,
   isTokenExpired,
-  isLoginValid
+  isLoginValid,
+  decodeToken
 }
 
 export default JwtService

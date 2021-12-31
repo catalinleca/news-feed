@@ -58,9 +58,9 @@ const credentialsSchema = {
   required: ["email", "password"]
 };
 
-const LOGIN_URL = "/signin"
-const REGISTER_URL = "/signup"
-const REFRESH_TOKEN_URL = "/refreshToken"
+const LOGIN_URL = "signin"
+const REGISTER_URL = "signup"
+const REFRESH_TOKEN_URL = "refreshToken"
 
 export default class AuthClient extends BaseClient {
   constructor(instance: AxiosInstance) {

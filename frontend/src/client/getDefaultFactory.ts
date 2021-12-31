@@ -1,6 +1,6 @@
 import AppClient from "./index";
-import JwtService from "./jwt.service";
 import {AxiosResponse} from "axios";
+import {requestFulfilledAuthInterceptor, responseRejectedAuthInterceptor} from "./interceptors";
 
 export const defaultAppFactory = (
   apiUrl: string,
@@ -12,11 +12,11 @@ export const defaultAppFactory = (
   })
 
   appClient.addInterceptor("request", {
-    onFulfilled: JwtService.requestFulfilledAuthInterceptor()
+    onFulfilled: requestFulfilledAuthInterceptor()
   })
   appClient.addInterceptor("response", {
     onFulfilled: (res: AxiosResponse) => res,
-    onRejected: JwtService.responseRejectedAuthInterceptor({
+    onRejected: responseRejectedAuthInterceptor({
       appClient
     })
   })

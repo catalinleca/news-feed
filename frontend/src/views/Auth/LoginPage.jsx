@@ -3,6 +3,10 @@ import * as React from "react";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {Box, Button, Grid, Paper, TextField, Typography} from "@mui/material";
+import appClient from "../../client/appClient";
+import AuthButton from "../../components/AuthButton";
+import {useState} from "react";
+import {useAuthDispatch} from "../../context/context";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -14,7 +18,10 @@ const validationSchema = Yup.object().shape({
     .max(40, 'Password must not exceed 40 characters'),
 })
 
-const LoginPage = () => {
+const LoginPage = (props) => {
+  const [errorsMessages, setErrorsMessages] = useState([])
+  const dispatch = useAuthDispatch()
+
   const {
     register,
     control,
@@ -24,8 +31,19 @@ const LoginPage = () => {
     resolver: yupResolver(validationSchema)
   });
 
-  const onSubmit = data => {
-    console.log(data)
+  const handleLogin = async (data) => {
+    try {
+      dispatch({TYPE: "LOGIN"})
+      const response = await appClient.auth.login(data);
+
+      dispatch({TYPE: "LOGIN_SUCCESS"})
+      console.log(response);
+      props.history.push("/home");
+    } catch (err) {
+      console.error(err.response.data.errors);
+      setErrorsMessages(err.response.data.errors);
+    }
+
   }
 
   return (
@@ -80,13 +98,11 @@ const LoginPage = () => {
                 </Typography>
               </Grid>
               <Grid mt={3}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleSubmit(onSubmit)}
-                >
-                  Login
-                </Button>
+                <AuthButton
+                  label="Login"
+                  errors={errorsMessages}
+                  clickHandler={handleSubmit(handleLogin)}
+                />
               </Grid>
             </Grid>
           </Grid>
