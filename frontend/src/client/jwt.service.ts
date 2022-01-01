@@ -1,5 +1,3 @@
-import {AxiosRequestConfig} from "axios";
-import AppClient from "./index";
 import jwt from "jsonwebtoken";
 
 export interface IAuthTokens {

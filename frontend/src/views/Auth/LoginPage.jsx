@@ -2,11 +2,11 @@ import * as Yup from "yup";
 import * as React from "react";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
-import {Box, Button, Grid, Paper, TextField, Typography} from "@mui/material";
+import {Box, Grid, Paper, TextField, Typography} from "@mui/material";
 import appClient from "../../client/appClient";
 import AuthButton from "../../components/AuthButton";
 import {useState} from "react";
-import {useAuthDispatch} from "../../context/context";
+import {AuthDispatchContext} from "../../context/context";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -20,11 +20,10 @@ const validationSchema = Yup.object().shape({
 
 const LoginPage = (props) => {
   const [errorsMessages, setErrorsMessages] = useState([])
-  const dispatch = useAuthDispatch()
+  const dispatch = React.useContext(AuthDispatchContext);
 
   const {
     register,
-    control,
     handleSubmit,
     formState: {errors}
   } = useForm({
@@ -34,10 +33,9 @@ const LoginPage = (props) => {
   const handleLogin = async (data) => {
     try {
       dispatch({TYPE: "LOGIN"})
-      const response = await appClient.auth.login(data);
+      await appClient.auth.login(data);
 
       dispatch({TYPE: "LOGIN_SUCCESS"})
-      console.log(response);
       props.history.push("/home");
     } catch (err) {
       console.error(err.response.data.errors);

@@ -59,8 +59,6 @@ export default class UserService extends BaseService {
     const refreshToken = await authService.createRefreshToken(user);
 
     return {
-      id: user.id,
-      email: user.email,
       accessToken,
       refreshToken
     }

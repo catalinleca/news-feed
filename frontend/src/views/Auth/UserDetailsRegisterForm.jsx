@@ -17,64 +17,18 @@ export const userDetailsValidationSchema = {
     .required('Company is required')
 }
 
-const companyOptions = [
-  {
-    "id": 2,
-    "userId": 1,
-    "title": "O fut pe ma-ta",
-    "body": "Mare descriere",
-    "createdAt": "2021-12-26T21:18:50.272Z",
-    "updatedAt": "2021-12-26T21:18:50.272Z"
-  },
-  {
-    "id": 3,
-    "userId": 1,
-    "title": "O fut pe ma-ta",
-    "body": "Mare descriere",
-    "createdAt": "2021-12-26T21:25:14.270Z",
-    "updatedAt": "2021-12-26T21:25:14.270Z"
-  },
-  {
-    "id": 7,
-    "userId": 1,
-    "title": "logat cu user 2, creat pentru user 1",
-    "body": "Mare descriere",
-    "createdAt": "2021-12-26T23:45:54.625Z",
-    "updatedAt": "2021-12-26T23:45:54.625Z"
-  },
-  {
-    "id": 8,
-    "userId": 1,
-    "title": "Updated with patch again 2",
-    "body": "Mare descriere",
-    "createdAt": "2021-12-27T00:03:56.155Z",
-    "updatedAt": "2021-12-27T00:20:27.953Z"
-  }
-]
-
-const UserDetailsRegisterForum = ({useFormProps: {register, control, errors, setValue}}) => {
+const UserDetailsRegisterForum = ({useFormProps: {register, errors, setValue}}) => {
   const [companyOptions, setCompanyOptions] = useState([])
 
   useEffect(() => {
     const fetchData = async () => {
 
-      const result = await appClient.posts.getAll()
-      console.log("result: ", result);
+      const result = await appClient.companies.getAll()
       setCompanyOptions(result.data)
     }
 
     fetchData();
   }, [])
-
-  const onSubmit = data => {
-    console.log(data)
-  }
-
-
-  const defaultProps = {
-    options: companyOptions,
-    getOptionLabel: (option) => option.title,
-  };
 
   return (
     <React.Fragment>
@@ -127,7 +81,7 @@ const UserDetailsRegisterForum = ({useFormProps: {register, control, errors, set
             (<Grid item xs={12}>
               <Autocomplete
                 options={companyOptions}
-                getOptionLabel={(option) => option.title}
+                getOptionLabel={(option) => option.name}
                 {...register('company')}
                 id="select-company"
                 disableListWrap
@@ -141,7 +95,7 @@ const UserDetailsRegisterForum = ({useFormProps: {register, control, errors, set
                 )}
                 renderOption={(props, option) => (
                   <MenuItem {...props} key={option.id}>
-                    {option.title}
+                    {option.name}
                   </MenuItem>
                 )}
                 onChange={(e, options) => setValue('company', options)}

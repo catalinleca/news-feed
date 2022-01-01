@@ -1,5 +1,5 @@
 import * as React from "react"
-import {Alert, Button, Grid, Typography} from "@mui/material";
+import {Alert, Button, Grid} from "@mui/material";
 
 const AuthButton = ({label, clickHandler, errors = []}) => {
 

@@ -2,10 +2,10 @@ import * as Yup from "yup";
 import * as React from "react";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
-import {Box, Button, Grid, Paper, TextField, Typography} from "@mui/material";
+import {Box, Grid, Paper, Typography} from "@mui/material";
 import BaseRegisterForm, {baseFormValidationSchema} from "./BaseRegisterForm";
 import UserDetailsRegisterForm, {userDetailsValidationSchema} from "./UserDetailsRegisterForm";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import AddressRegisterForm from "./AddressRegisterForm";
 import appClient from "../../client/appClient";
 import AuthButton from "../../components/AuthButton";
@@ -15,7 +15,7 @@ const validationSchema = Yup.object().shape({
   ...userDetailsValidationSchema
 })
 
-const RegisterPage = () => {
+const RegisterPage = (props) => {
   const {
     register,
     control,
@@ -27,21 +27,43 @@ const RegisterPage = () => {
   });
   const [errorsMessages, setErrorsMessages] = useState([])
 
-  useEffect(() => {
-    const fetchData = async () => {
-      // const appClient = defaultAppFactory(
-      //   "http://localhost:3001"
-      // )
+  const handleRegister = async (data) => {
+    try {
+      const {
+        company,
+        name,
+        username,
+        password,
+        confirmPassword,
+        email,
+        phone,
+        street,
+        city,
+        suite,
+      } = data
 
-      const result = await appClient.posts.getAll()
-      console.log("result: ", result);
+      const registerData = {
+        companyId: company.id.toString(),
+        name,
+        username,
+        password,
+        confirmPassword,
+        email,
+        phone: phone.toString(),
+        address: {
+          street: street,
+          city: city,
+          suite: suite
+        }
+      }
+
+      await appClient.auth.register(registerData);
+
+      props.history.push("/login");
+    } catch (err) {
+      console.error(err.response.data.errors);
+      setErrorsMessages(err.response.data.errors);
     }
-
-    // fetchData();
-  }, [register])
-
-  const handleRegister = data => {
-    console.log(data)
   }
 
   return (

@@ -16,6 +16,10 @@ export default class AddressService {
 
     const geoLocation = await AddressService.geocoder.geocode(addressBody.street + " " + addressBody.city)
 
+    if (!geoLocation) {
+      return address
+    }
+    /** TBD handle undefined or wrong address*/
     const geo = await address.createGeo({
       lat: geoLocation[0].latitude,
       lng: geoLocation[0].longitude,

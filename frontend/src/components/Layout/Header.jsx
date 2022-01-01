@@ -2,21 +2,28 @@ import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import {Button, Grid, Link, Typography} from "@mui/material";
+import {Button, Grid, Typography} from "@mui/material";
 import JwtService from "../../client/jwt.service";
-import {useAuthState} from "../../context/context";
+import {AuthDispatchContext, AuthStateContext} from "../../context/context";
+import { useHistory } from "react-router-dom";
 
-export const Header = (props) => {
-  const state = useAuthState()
+export const Header = () => {
+  const state = React.useContext(AuthStateContext);
+  const dispatch = React.useContext(AuthDispatchContext);
 
-  console.log("state: ", state);
+  let history = useHistory();
 
   const logoutHandler = () => {
+    dispatch({TYPE: "LOGOUT"})
     JwtService.logout()
-    props.history.push('/login')
+    history.push('/login')
   }
 
-  const logoutButton = JwtService.isLoginValid() ? (
+  const registerHandler = () => {
+    history.push('/register')
+  }
+
+  const logoutButton = (
     <Button
       onClick={logoutHandler}
       style={{
@@ -25,8 +32,21 @@ export const Header = (props) => {
     >
       Logout
     </Button>
-  ) : null
+  )
 
+  const registerButton = (
+    <Button
+      onClick={registerHandler}
+      style={{
+        color: "white"
+      }}
+    >
+      Register
+    </Button>
+  )
+
+
+  const actionButton = state.isLoggedIn ? logoutButton : registerButton;
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -43,7 +63,7 @@ export const Header = (props) => {
               </Typography>
             </Grid>
             <Grid item={true}>
-              {logoutButton}
+              {actionButton}
             </Grid>
           </Grid>
         </Toolbar>

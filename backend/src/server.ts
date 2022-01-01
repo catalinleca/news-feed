@@ -3,7 +3,7 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import sequelize from "./utils/db";
 import createAssociations from "./utils/associations";
-import {authRouter, postRouter} from "./routes";
+import {authRouter, companyRouter, postRouter} from "./routes";
 import "dotenv/config";
 import {errorHandler} from "./middlewares";
 import {userRouter} from "./routes/user.routes";
@@ -27,6 +27,8 @@ app.use((req, res, next) => {
 app.use("/auth", authRouter);
 app.use("/api", postRouter);
 app.use("/api", userRouter);
+app.use("/api", commentRouter);
+app.use("/api", companyRouter);
 
 app.get('/', (req, res) => {
   res.send('Well done!');

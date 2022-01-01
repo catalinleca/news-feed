@@ -1,13 +1,13 @@
-const JwtService = require("../client/jwt.service");
+import JwtService from "../client/jwt.service";
 
 export const initialState = {
-  isLoggedIn: false,
-  user: null,
+  isLoggedIn: JwtService.isLoginValid(),
+  user: JwtService.decodeToken(JwtService.getLocalAccessToken()),
   loading: false
 };
 
 const AuthReducer = (state, action) => {
-  switch (action.type) {
+  switch (action.TYPE) {
     case "LOGIN":
       return {
         ...initialState,
@@ -23,7 +23,7 @@ const AuthReducer = (state, action) => {
         isLoggedIn: true,
         user,
       };
-    case "LOGOUT_SUCCESS":
+    case "LOGOUT":
       JwtService.logout()
       return {
         ...state,
