@@ -2,17 +2,17 @@ import BaseCrudClient from "../base/baseCrudClient";
 import {BaseInterface} from "../base";
 import {AxiosInstance} from "axios";
 
-interface ICompany extends BaseInterface {
+interface IPost extends BaseInterface {
   id: number;
-  name: string,
-  catchPhrase: string,
-  bs: string,
+  userId: number;
+  title: string;
+  body: string;
 }
 
-class CompanyClient extends BaseCrudClient<ICompany> {
+class PostsClient extends BaseCrudClient<IPost> {
   constructor(instance: AxiosInstance) {
-    super(instance, "api/companies")
+    super(instance, "api/posts")
   }
 }
 
-export default CompanyClient;
+export default PostsClient;

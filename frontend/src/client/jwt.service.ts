@@ -5,6 +5,11 @@ export interface IAuthTokens {
   refreshToken: string;
 }
 
+export interface IDecodedToken {
+  userId: string;
+  email: string;
+}
+
 export const SESSION_KEY = "app-auth";
 
 const getLocalAccessToken = () => {
@@ -35,9 +40,9 @@ const getLocalRefreshToken = () => {
   return
 };
 
-const decodeToken = (token: string) => {
+const decodeToken = (token: string): IDecodedToken | null => {
   const decoded = jwt.decode(token) as { [key: string]: any }
-  if (!decoded) return;
+  if (!decoded) return null;
 
   return {
     userId: decoded.userId,
@@ -97,6 +102,10 @@ const isLoginValid = (): boolean => {
   return !isAnyTokenInvalid;
 }
 
+const getCurrentTokenPayload = () => {
+  return decodeToken(getLocalAccessToken())
+}
+
 const JwtService = {
   getLocalRefreshToken,
   setAuthTokens,
@@ -104,7 +113,8 @@ const JwtService = {
   getLocalAccessToken,
   isTokenExpired,
   isLoginValid,
-  decodeToken
+  decodeToken,
+  getCurrentTokenPayload
 }
 
 export default JwtService

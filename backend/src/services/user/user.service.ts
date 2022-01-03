@@ -3,7 +3,7 @@ import {AddressService, Password} from "../index";
 import BaseService from "../base.service";
 import {CreateOptions} from "sequelize";
 import {getUserDto, LoginUserDto} from "./dto";
-import {InvalidCredentialsError} from "../../utils/errors";
+import {UnauthorizedError} from "../../utils/errors";
 import "dotenv/config";
 import AuthService from "../auth";
 
@@ -41,13 +41,13 @@ export default class UserService extends BaseService {
     })
 
     if (!user) {
-      throw new InvalidCredentialsError()
+      throw new UnauthorizedError("Wrong username or password")
     }
 
     const isPasswordValid = await Password.compare(user.password, password)
 
     if (!isPasswordValid) {
-      throw new InvalidCredentialsError()
+      throw new UnauthorizedError("Wrong username or password")
     }
 
     const authService = new AuthService();

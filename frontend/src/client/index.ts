@@ -1,7 +1,7 @@
 import AuthClient from "./auth";
 import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse} from "axios";
 import PostsClient from "./posts";
-import CompanyClient from "./posts";
+import CompanyClient from "./company";
 
 interface IAppClient {
   readonly auth: AuthClient;

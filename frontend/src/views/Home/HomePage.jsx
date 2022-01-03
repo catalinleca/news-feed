@@ -1,6 +1,10 @@
+import {Posts} from "../../components";
+
 const HomePage = () => {
   return (
-    <div>HomePage</div>
+    <div>
+      <Posts/>
+    </div>
   )
 }
 

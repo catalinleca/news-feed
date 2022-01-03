@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from "express";
-import {BadRequestError} from "../utils/errors/badRequestError";
+import {BadRequestError} from "../utils/errors";
 import AuthService from "../services/auth";
 import {IAccessTokenPayload} from "../services/auth/auth.service";
 
@@ -21,8 +21,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
   const accessToken = bearerHeader.split(" ")[1]
 
   const authService = new AuthService()
-  const decode = authService.checkAccessToken(accessToken) as IAccessTokenPayload;
-
-  req.currentUser = decode
-  next();
+  authService.checkAccessToken(accessToken, next, (decode: IAccessTokenPayload) => {
+    req.currentUser = decode
+  })
 }

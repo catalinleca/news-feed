@@ -21,6 +21,9 @@ export const responseRejectedAuthInterceptor = ({
                                          }: {
   appClient: AppClient
 }) => async (err: any) => {
+  console.log("err: ", err);
+  console.log("err.response: ", err.response);
+
   const originalConfig = err.config;
 
   if (originalConfig !== "/auth/signin" && err.response) {
@@ -34,6 +37,8 @@ export const responseRejectedAuthInterceptor = ({
 
         return appClient.instance(originalConfig)
       } catch (error) {
+        JwtService.logout();
+        window.location.replace("/login");
         return Promise.reject(error)
       }
     }

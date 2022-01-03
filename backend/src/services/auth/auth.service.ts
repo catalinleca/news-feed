@@ -1,9 +1,10 @@
-import jwt, {JwtPayload} from "jsonwebtoken";
+import jwt, {JwtPayload, TokenExpiredError} from "jsonwebtoken";
 import User from "../../models/User";
 import {v4 as uuidv4} from "uuid";
 import RefreshToken from "../../models/RefreshToken";
-import {InvalidCredentialsError} from "../../utils/errors";
-import {BadRequestError} from "../../utils/errors/badRequestError";
+import {ForbiddenError, UnauthorizedError} from "../../utils/errors";
+import {BadRequestError} from "../../utils/errors";
+import {NextFunction} from "express";
 
 export interface IAccessTokenPayload {
   userId: number;
@@ -47,7 +48,7 @@ export default class AuthService {
 
     if (!dbRefreshToken) {
       /** TBD: make errors more understandable for debugging */
-      throw new InvalidCredentialsError()
+      throw new ForbiddenError()
     }
 
     if (this.isRefreshTokenExpired(dbRefreshToken)) {
@@ -57,7 +58,7 @@ export default class AuthService {
         }
       })
 
-      throw new BadRequestError("Refresh token expired. Please login again!")
+      throw new ForbiddenError("Refresh token expired. Please login again!")
     }
 
     const user = await dbRefreshToken.getUser()
@@ -73,9 +74,20 @@ export default class AuthService {
     }
   }
 
-  checkAccessToken(token: string): JwtPayload | string {
+  checkAccessToken(token: string, next: NextFunction, successCb: any): void {
     /** TBD: Catch jwt expired error */
-    return jwt.verify(token, this.secret as string)
+    jwt.verify(token, this.secret as string, ((err, decode) => {
+      if (err) {
+        if (err instanceof TokenExpiredError) {
+          next(new UnauthorizedError("Unauthorized! Access token expired"))
+        }
+
+        next(new UnauthorizedError())
+      }
+
+      successCb(decode)
+      next()
+    }))
   }
 
 }

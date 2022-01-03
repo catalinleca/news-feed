@@ -17,23 +17,29 @@ export const createPostController = async (req: Request, res: Response, next: Ne
     })
 
     return res.status(201).json(result);
-  } catch(err) {
+  } catch (err) {
     next(err)
   }
 }
 
 export const getPostsController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userId = req.params.userId || req.currentUser!.userId;
+    let result;
+    // const userId = req.params.userId || req.currentUser!.userId;
 
-    const result = await Post.findAll({
-      where: {
-        userId
-      }
-    })
+    const userId = req.query.userId;
+    if (userId) {
+      result = await Post.findAll({
+        where: {
+          userId
+        }
+      })
+    } else {
+      result = await Post.findAll()
+    }
 
     return res.status(201).json(result);
-  } catch(err) {
+  } catch (err) {
     next(err)
   }
 }
@@ -55,7 +61,7 @@ export const getPostByIdController = async (req: Request, res: Response, next: N
     }
 
     return res.status(201).json(result);
-  } catch(err) {
+  } catch (err) {
     next(err)
   }
 }
@@ -78,7 +84,7 @@ export const updatePostController = async (req: Request, res: Response, next: Ne
     })
 
     return res.status(201).json(result);
-  } catch(err) {
+  } catch (err) {
     next(err)
   }
 }
@@ -94,7 +100,7 @@ export const deletePostController = async (req: Request, res: Response, next: Ne
     })
 
     return res.status(201).json(result);
-  } catch(err) {
+  } catch (err) {
     next(err)
   }
 }
