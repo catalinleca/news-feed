@@ -28,7 +28,7 @@ export const useProgressiveRequest = (apiCall, page, limit) => {
 
     fetchData();
 
-  }, [page, limit])
+  }, [page, limit, apiCall])
 
   return {
     data,

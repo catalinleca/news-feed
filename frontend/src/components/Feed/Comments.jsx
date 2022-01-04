@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useCallback, useState} from "react";
 import {Button, Grid, LinearProgress, List, Typography} from "@mui/material";
 import {Comment} from "./Comment";
 import appClient from "../../client/appClient";
@@ -9,17 +9,19 @@ export const Comments = ({postId}) => {
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(5);
 
+  const apiCall = useCallback(() => appClient.comments.getAllWithQueryParams({
+    postId,
+    _page: page,
+    _limit: limit
+  }), [page, limit, postId])
+
   const {
     data: comments,
     isLoading,
     error,
     hasMore
   } = useProgressiveRequest(
-    () => appClient.comments.getAllWithQueryParams({
-      postId,
-      _page: page,
-      _limit: limit
-    }),
+    apiCall,
     page,
     limit
   )

@@ -24,16 +24,18 @@ export const Posts = () => {
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(5);
 
+  const apiCall = useCallback(() => appClient.posts.getAllWithQueryParams({
+    _page: page,
+    _limit: limit
+  }), [page, limit])
+
   const {
     data: posts,
     isLoading,
     error,
     hasMore
   } = useProgressiveRequest(
-    () => appClient.posts.getAllWithQueryParams({
-      _page: page,
-      _limit: limit
-    }),
+    apiCall,
     page,
     limit
   )
@@ -80,7 +82,7 @@ export const Posts = () => {
           >
             <CircularProgress/>
           </Grid>
-      )}
+        )}
     </Grid>
 
   )
