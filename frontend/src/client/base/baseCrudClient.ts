@@ -43,6 +43,21 @@ export default class BaseCrudClient<dataType>
     return response;
   };
 
+  getAllWithQueryParams = async (params: any) => {
+    const queryParamString: string = Object.keys(params)
+      .map((key: string) => `${key}=${encodeURIComponent(params[key])}`)
+      .join("&");
+
+    const response = await this.instance.get<Array<dataType>>(
+      `/${this.getUrl()}?${queryParamString}`,
+    );
+    this.validate(response.data, "getAll", "response", {
+      type: "array",
+      items: this.jsonSchema
+    });
+    return response;
+  };
+
   getById = async (id: number, config?: AxiosRequestConfig) => {
     this.validate(id, "getById", "request: id", {type: "number"});
     const response = await this.instance.get<dataType>(

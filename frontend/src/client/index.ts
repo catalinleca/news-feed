@@ -2,11 +2,13 @@ import AuthClient from "./auth";
 import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse} from "axios";
 import PostsClient from "./posts";
 import CompanyClient from "./company";
+import CommentsClient from "./comment";
 
 interface IAppClient {
   readonly auth: AuthClient;
   readonly posts: PostsClient;
   readonly companies: CompanyClient;
+  readonly comments: CommentsClient;
 }
 
 type requestInterceptor = {
@@ -33,6 +35,7 @@ export default class AppClient implements IAppClient {
   public auth: AuthClient;
   public posts: PostsClient
   public companies: CompanyClient
+  public comments: CommentsClient
 
   constructor(config?: AxiosRequestConfig) {
     this.instance = axios.create({
@@ -46,6 +49,7 @@ export default class AppClient implements IAppClient {
     this.auth = new AuthClient(this.instance);
     this.posts = new PostsClient(this.instance);
     this.companies = new CompanyClient(this.instance);
+    this.comments = new CommentsClient(this.instance);
   }
 
   addInterceptor = (

@@ -1,7 +1,9 @@
 import {useEffect, useState} from "react";
-import {Button, Grid, List} from "@mui/material";
+import {Box, Button, Grid, LinearProgress, List, Typography} from "@mui/material";
 import {Comment} from "./Comment";
 import axios from "axios";
+import appClient from "../../client/appClient";
+import * as React from "react";
 
 export const Comments = ({postId}) => {
   const [page, setPage] = useState(1)
@@ -15,7 +17,12 @@ export const Comments = ({postId}) => {
 
     const fetchData = async () => {
       try {
-        const response = await axios.get(`https://jsonplaceholder.typicode.com/posts/${postId}/comments?_page=${page}&_limit=${limit}`)
+        // const response = await axios.get(`https://jsonplaceholder.typicode.com/posts/${postId}/comments?_page=${page}&_limit=${limit}`)
+        const response = await appClient.comments.getAllWithQueryParams({
+          postId,
+          _page: page,
+          _limit: limit
+        })
 
         if (response.data.length) {
           setComments((prev) => [...prev, ...response.data])
@@ -37,30 +44,46 @@ export const Comments = ({postId}) => {
     setPage(prevPage => prevPage + 1)
   }
 
-  console.log("comments: ", comments)
   return (
     <Grid container>
+      <Typography paragraph>Comments</Typography>
       <List
         sx={{
           width: '100%',
           maxHeight: "250px",
-          overflowY: "scroll"
+          overflowY: "auto"
         }}
       >
-        {comments && comments.length && comments.map((comment, index) => (
-          <Comment
-            key={`${comment.id}${index}`}
-            comment={comment}
-          />
-        ))}
         {
-          hasMore && <Button
-            size="small"
-            variant="text"
-            onClick={loadMoreCommentsHandler}
-          >
-            Load more comments
-          </Button>
+          comments && comments.length
+            ? (
+              <Grid>
+                {
+                  comments.map((comment, index) => (
+                    <Comment
+                      key={`${comment.id}${index}`}
+                      comment={comment}
+                    />
+                  ))
+                }
+                {
+                  (hasMore && !loading) ? (
+                    <Button
+                      size="small"
+                      variant="text"
+                      onClick={loadMoreCommentsHandler}
+                    >
+                      Load more comments
+                    </Button>
+                  ) : ( loading && (
+                    <Grid>
+                      <LinearProgress />
+                    </Grid>
+                  ))
+                }
+              </Grid>
+            )
+            : (<Typography variant="caption">No comments</Typography>)
         }
       </List>
     </Grid>

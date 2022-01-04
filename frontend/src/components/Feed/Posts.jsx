@@ -2,6 +2,7 @@ import React, {forwardRef, useCallback, useEffect, useRef, useState} from "react
 import {CircularProgress, Grid} from "@mui/material";
 import {Post} from "./Post";
 import axios from "axios";
+import appClient from "../../client/appClient";
 
 const PostWrapper = forwardRef(({post}, ref) => (
   <Grid
@@ -25,6 +26,7 @@ export const Posts = () => {
   const [posts, setPosts] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(true);
+
   const observer = useRef(
     new IntersectionObserver(entries => {
       if (entries[0].isIntersecting && hasMore) {
@@ -45,14 +47,21 @@ export const Posts = () => {
 
   useEffect(() => {
     setLoading(true)
+    const currentObserver = observer.current;
 
     const fetchData = async () => {
       try {
-        const response = await axios.get(`https://jsonplaceholder.typicode.com/posts?_page=${page}&_limit=${limit}`)
+        const response = await appClient.posts.getAllWithQueryParams({
+          _page: page,
+          _limit: limit
+        })
 
-        console.log("response: ", response);
+        if (response.data.length) {
+          setPosts((prev) => [...prev, ...response.data])
+        } else {
+          setHasMore(false);
+        }
 
-        setPosts((prev) => [...prev, ...response.data])
       } catch (err) {
         console.error(err)
       } finally {
@@ -62,16 +71,17 @@ export const Posts = () => {
 
     fetchData();
 
-    return () => observer.current.disconnect()
+    return () => currentObserver.disconnect()
 
   }, [page, limit])
 
+  console.log("===")
   return (
     <Grid
       container
       justifyContent="center"
     >
-      {posts && posts.length && posts.map((post, index) => (
+      {posts && posts.map((post, index) => (
           <PostWrapper
             ref={posts.length === index + 1 ? setLoader : null}
             key={`${post?.id}${index}`}
@@ -79,7 +89,18 @@ export const Posts = () => {
           />
         )
       )}
-      {loading && <CircularProgress/>}
+      <br/>
+      {
+        loading && (
+          <Grid
+            container
+            justifyContent="center"
+            spacing={1}
+            mt={2}
+          >
+            <CircularProgress/>
+          </Grid>
+      )}
     </Grid>
 
   )

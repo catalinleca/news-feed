@@ -2,6 +2,7 @@ import {Request, Response, NextFunction} from "express";
 import {matchedData} from "express-validator";
 import Post from "../models/Post";
 import {NotFoundError} from "../utils/errors";
+import {getPaginationConditions, getQueryConditions} from "../utils";
 
 export const createPostController = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -24,21 +25,17 @@ export const createPostController = async (req: Request, res: Response, next: Ne
 
 export const getPostsController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    let result;
-    // const userId = req.params.userId || req.currentUser!.userId;
+    const conditions = getPaginationConditions(req);
+    const whereConditions = getQueryConditions(req, Post);
 
-    const userId = req.query.userId;
-    if (userId) {
-      result = await Post.findAll({
-        where: {
-          userId
-        }
-      })
-    } else {
-      result = await Post.findAll()
-    }
+    const result = await Post.findAll({
+      where: {
+        ...whereConditions
+      },
+      ...conditions
+    })
 
-    return res.status(201).json(result);
+    return res.status(200).json(result);
   } catch (err) {
     next(err)
   }

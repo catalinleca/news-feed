@@ -29,16 +29,10 @@ const ExpandMore = styled((props) => {
 }));
 
 export const Post = ({post}) => {
-  const [expanded, setExpanded] = React.useState(false);
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
-
   const {email} = JwtService.getCurrentTokenPayload();
 
   return (
-    <Card sx={{maxWidth: 645}}>
+    <Card sx={{width: 645}}>
       <CardHeader
         avatar={
           <Avatar
@@ -67,7 +61,6 @@ export const Post = ({post}) => {
 
       </CardActions>
         <CardContent>
-          <Typography paragraph>Comments</Typography>
           <Comments
             postId={post.id}
           />

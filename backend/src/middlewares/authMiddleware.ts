@@ -7,6 +7,9 @@ declare global {
   namespace Express {
     interface Request {
       currentUser?: IAccessTokenPayload;
+      conditions?: {
+        [key: string]: any
+      }
     }
   }
 }

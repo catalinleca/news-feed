@@ -2,8 +2,6 @@ import {
   Avatar,
   Divider,
   Grid,
-  Icon,
-  IconButton,
   ListItem,
   ListItemAvatar,
   ListItemText,
@@ -14,7 +12,7 @@ import {useState} from "react";
 
 const MAX_COMMENT = 100;
 export const Comment = ({comment}) => {
-  const [readMore, setReadMore] = useState(true);
+  const [readMore, setReadMore] = useState(comment.body.length > MAX_COMMENT);
   const [colors, _] = useState(`${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)}`)
   const commentTooBig = comment.body.length > MAX_COMMENT;
 
@@ -46,7 +44,7 @@ export const Comment = ({comment}) => {
               >
                 {comment.email.split('@')[0] + " — "}
               </Typography>
-              {readMore ? comment.body.slice(0, MAX_COMMENT) + "..." : comment.body}
+              {readMore ? (comment.body.slice(0, MAX_COMMENT) + "...") : comment.body}
               <br/>
               {
                 commentTooBig &&

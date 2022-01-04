@@ -1,6 +1,7 @@
 import express, {NextFunction, Request, Response} from "express";
 import {verifyToken} from "../middlewares";
 import Comment from "../models/Comment";
+import {getPaginationConditions, getQueryConditions} from "../utils";
 
 const commentRouter = express.Router({mergeParams: true});
 
@@ -8,14 +9,14 @@ const commentRouter = express.Router({mergeParams: true});
 
 commentRouter.get("/comments", verifyToken, async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userId = req.params.userId || req.currentUser!.userId;
-    const postId = req.params.postId || req.query.postId;
+    const conditions = getPaginationConditions(req);
+    const whereConditions = getQueryConditions(req, Comment);
 
     const result = await Comment.findAll({
       where: {
-        userId,
-        postId
-      }
+        ...whereConditions
+      },
+      ...conditions
     })
 
     return res.status(200).json(result);

@@ -1,11 +1,20 @@
 import {NextFunction, Request, Response} from "express";
 import User from "../models/User";
+import {getPaginationConditions, getQueryConditions} from "../utils";
 
 export const getUsersController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const result = await User.findAll()
+    const conditions = getPaginationConditions(req);
+    const whereConditions = getQueryConditions(req, User);
 
-    return res.status(201).json(result);
+    const result = await User.findAll({
+      where: {
+        ...whereConditions
+      },
+      ...conditions
+    })
+
+    return res.status(200).json(result);
   } catch(err) {
     next(err)
   }
@@ -21,7 +30,7 @@ export const getUserByIdController = async (req: Request, res: Response, next: N
       }
     })
 
-    return res.status(201).json(result);
+    return res.status(200).json(result);
   } catch(err) {
     next(err)
   }
