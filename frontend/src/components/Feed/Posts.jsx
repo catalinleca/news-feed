@@ -1,8 +1,8 @@
-import React, {forwardRef, useCallback, useEffect, useRef, useState} from "react";
+import React, {forwardRef, useCallback, useRef, useState} from "react";
 import {CircularProgress, Grid} from "@mui/material";
 import {Post} from "./Post";
-import axios from "axios";
 import appClient from "../../client/appClient";
+import {useProgressiveRequest} from "../../hooks/useProgressiveRequest";
 
 const PostWrapper = forwardRef(({post}, ref) => (
   <Grid
@@ -23,9 +23,20 @@ const PostWrapper = forwardRef(({post}, ref) => (
 export const Posts = () => {
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(5);
-  const [posts, setPosts] = useState([]);
-  const [hasMore, setHasMore] = useState(true);
-  const [loading, setLoading] = useState(true);
+
+  const {
+    data: posts,
+    isLoading,
+    error,
+    hasMore
+  } = useProgressiveRequest(
+    () => appClient.posts.getAllWithQueryParams({
+      _page: page,
+      _limit: limit
+    }),
+    page,
+    limit
+  )
 
   const observer = useRef(
     new IntersectionObserver(entries => {
@@ -45,37 +56,6 @@ export const Posts = () => {
     if (node) observer.current.observe(node)
   }, []);
 
-  useEffect(() => {
-    setLoading(true)
-    const currentObserver = observer.current;
-
-    const fetchData = async () => {
-      try {
-        const response = await appClient.posts.getAllWithQueryParams({
-          _page: page,
-          _limit: limit
-        })
-
-        if (response.data.length) {
-          setPosts((prev) => [...prev, ...response.data])
-        } else {
-          setHasMore(false);
-        }
-
-      } catch (err) {
-        console.error(err)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchData();
-
-    return () => currentObserver.disconnect()
-
-  }, [page, limit])
-
-  console.log("===")
   return (
     <Grid
       container
@@ -91,7 +71,7 @@ export const Posts = () => {
       )}
       <br/>
       {
-        loading && (
+        isLoading && (
           <Grid
             container
             justifyContent="center"

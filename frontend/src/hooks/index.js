@@ -7,7 +7,6 @@ export const useRequest = (apiCall, deps = [], cb) => {
   const makeApiCall = async () => {
     try {
       const response = await apiCall()
-      console.log("response: ", response);
       setData(response.data)
 
       cb && cb(data);

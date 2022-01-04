@@ -1,27 +1,13 @@
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 
-export const useProgressiveRequest = ({apiCall, intersectionHandler, page, limit, observerConfig}) => {
+export const useProgressiveRequest = (apiCall, page, limit) => {
   const [data, setData] = useState([]);
   const [hasMore, setHasMore] = useState(true);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const observer = useRef(
-    new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && hasMore) {
-        intersectionHandler()
-      }
-    }, {
-      root: null,
-      rootMargin: "20px",
-      threshold: 0,
-      ...observerConfig
-    })
-  )
-
   useEffect(() => {
-    setLoading(true)
-    const currentObserver = observer.current;
+    setIsLoading(true)
 
     const fetchData = async () => {
       try {
@@ -36,19 +22,18 @@ export const useProgressiveRequest = ({apiCall, intersectionHandler, page, limit
         console.error(err)
         setError(err);
       } finally {
-        setLoading(false)
+        setIsLoading(false)
       }
     }
 
     fetchData();
 
-    return () => currentObserver.disconnect()
   }, [page, limit])
 
   return {
     data,
-    hasMore,
-    loading,
-    error
-  }
+    isLoading,
+    error,
+    hasMore
+  };
 }

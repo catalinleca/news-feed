@@ -1,44 +1,28 @@
-import {useEffect, useState} from "react";
-import {Box, Button, Grid, LinearProgress, List, Typography} from "@mui/material";
+import {useState} from "react";
+import {Button, Grid, LinearProgress, List, Typography} from "@mui/material";
 import {Comment} from "./Comment";
-import axios from "axios";
 import appClient from "../../client/appClient";
 import * as React from "react";
+import {useProgressiveRequest} from "../../hooks/useProgressiveRequest";
 
 export const Comments = ({postId}) => {
   const [page, setPage] = useState(1)
-  const [limit, setLimit] = useState(3);
-  const [comments, setComments] = useState([]);
-  const [hasMore, setHasMore] = useState(true);
-  const [loading, setLoading] = useState(true);
+  const [limit, setLimit] = useState(5);
 
-  useEffect(() => {
-    setLoading(true)
-
-    const fetchData = async () => {
-      try {
-        // const response = await axios.get(`https://jsonplaceholder.typicode.com/posts/${postId}/comments?_page=${page}&_limit=${limit}`)
-        const response = await appClient.comments.getAllWithQueryParams({
-          postId,
-          _page: page,
-          _limit: limit
-        })
-
-        if (response.data.length) {
-          setComments((prev) => [...prev, ...response.data])
-        } else {
-          setHasMore(false);
-        }
-      } catch (err) {
-        console.error(err)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchData();
-
-  }, [page, limit])
+  const {
+    data: comments,
+    isLoading,
+    error,
+    hasMore
+  } = useProgressiveRequest(
+    () => appClient.comments.getAllWithQueryParams({
+      postId,
+      _page: page,
+      _limit: limit
+    }),
+    page,
+    limit
+  )
 
   const loadMoreCommentsHandler = () => {
     setPage(prevPage => prevPage + 1)
@@ -67,7 +51,7 @@ export const Comments = ({postId}) => {
                   ))
                 }
                 {
-                  (hasMore && !loading) ? (
+                  (hasMore && !isLoading) ? (
                     <Button
                       size="small"
                       variant="text"
@@ -75,7 +59,7 @@ export const Comments = ({postId}) => {
                     >
                       Load more comments
                     </Button>
-                  ) : ( loading && (
+                  ) : ( isLoading && (
                     <Grid>
                       <LinearProgress />
                     </Grid>
