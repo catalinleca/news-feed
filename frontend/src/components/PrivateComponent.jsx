@@ -1,27 +1,11 @@
-import React, {useEffect, useState} from "react";
-import JwtService from "../client/jwt.service";
-import {Redirect, Route} from "react-router-dom";
+import React from "react";
+import {useAuthState} from "../context/context";
 
-export const PrivateComponent = ({component: Component, ...rest}) => {
-  const [showComponent, setShowComponent] = useState(false)
+export const PrivateComponent = ({componentUserId, children}) => {
+  const state = useAuthState();
+  const userId = state.user.userId
 
-  useEffect(() => {
-    const isLoginValid = JwtService.isLoginValid()
+  const showComponent = componentUserId === userId
 
-    if (isLoginValid) {
-      setShowComponent(true)
-    }
-  }, [])
-
-  return <Route
-    {...rest}
-    render={props => (
-      showComponent
-        ? <Component {...props}/>
-        : <Redirect to={{
-          pathname: "/login",
-          state: { from: props.location }
-        }}/>
-    )}
-  />
+  return showComponent ? children : null;
 }

@@ -2,7 +2,7 @@ import JwtService from "../client/jwt.service";
 
 export const initialState = {
   isLoggedIn: JwtService.isLoginValid(),
-  user: JwtService.decodeToken(JwtService.getLocalAccessToken()),
+  user: JwtService.getCurrentTokenPayload(),
   loading: false
 };
 

@@ -31,6 +31,7 @@ export const Posts = () => {
 
   const {
     data: posts,
+    setData: setPosts,
     isLoading,
     error,
     hasMore

@@ -32,6 +32,7 @@ export const useProgressiveRequest = (apiCall, page, limit) => {
 
   return {
     data,
+    setData,
     isLoading,
     error,
     hasMore
