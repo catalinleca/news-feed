@@ -20,45 +20,7 @@ const PostWrapper = forwardRef(({post}, ref) => (
   </Grid>
 ))
 
-export const Posts = () => {
-  const [page, setPage] = useState(1)
-  const [limit, setLimit] = useState(5);
-
-  const apiCall = useCallback(() => appClient.posts.getAllWithQueryParams({
-    _page: page,
-    _limit: limit
-  }), [page, limit])
-
-  const {
-    data: posts,
-    setData: setPosts,
-    isLoading,
-    error,
-    hasMore
-  } = useProgressiveRequest(
-    apiCall,
-    page,
-    limit
-  )
-
-  const observer = useRef(
-    new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && hasMore) {
-        setPage(prevPageNumber => prevPageNumber + 1)
-      }
-    }, {
-      root: null,
-      rootMargin: "20px",
-      threshold: 0
-    })
-  )
-
-  const setLoader = useCallback(node => {
-    if (observer.current) observer.current.disconnect();
-
-    if (node) observer.current.observe(node)
-  }, []);
-
+export const Posts = ({posts, isLoading, setLoader}) => {
   return (
     <Grid
       container

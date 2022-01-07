@@ -6,7 +6,7 @@ import {Box, Grid, Paper, TextField, Typography} from "@mui/material";
 import appClient from "../../client/appClient";
 import AuthButton from "../../components/AuthButton";
 import {useState} from "react";
-import {AuthDispatchContext} from "../../context/context";
+import {AuthDispatchContext} from "../../context/auth/authContext";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()

@@ -19,7 +19,10 @@ commentRouter.get("/comments", verifyToken, async (req: Request, res: Response, 
       where: {
         ...whereConditions
       },
-      ...conditions
+      ...conditions,
+      order: [
+        ["updatedAt", "DESC"]
+      ]
     })
 
     return res.status(200).json(result);

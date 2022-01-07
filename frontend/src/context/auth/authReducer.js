@@ -1,4 +1,4 @@
-import JwtService from "../client/jwt.service";
+import JwtService from "../../client/jwt.service";
 
 export const initialState = {
   isLoggedIn: JwtService.isLoginValid(),

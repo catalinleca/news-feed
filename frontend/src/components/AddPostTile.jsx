@@ -1,8 +1,7 @@
-import {Comments} from "./Feed";
-import {Card, CardContent, Grid, TextField, Typography} from "@mui/material";
+import {Card, Grid, TextField} from "@mui/material";
 import * as React from "react";
 
-export const AddPost = () => {
+export const AddPostTile = ({clickHandler}) => {
   return (
     <Grid
       container
@@ -29,6 +28,7 @@ export const AddPost = () => {
               variant="standard"
               placeholder="What's on your mind?"
               fullWidth={true}
+              onClick={clickHandler}
             />
           </Grid>
         </Grid>

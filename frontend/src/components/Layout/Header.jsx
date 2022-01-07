@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import {Button, Grid, Typography} from "@mui/material";
 import JwtService from "../../client/jwt.service";
-import {AuthDispatchContext, AuthStateContext} from "../../context/context";
+import {AuthDispatchContext, AuthStateContext} from "../../context/auth/authContext";
 import { useHistory } from "react-router-dom";
 
 export const Header = () => {

@@ -84,6 +84,9 @@ export default class BaseCrudClient<dataType>
     body: Partial<dataType>,
     config?: AxiosRequestConfig
   ) => {
+    if (!id) {
+      console.error("No id provided")
+    }
     this.validate(id, "update", "request: id", {type: "number"});
     this.validate(
       body,

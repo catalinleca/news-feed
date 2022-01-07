@@ -5,14 +5,22 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  IconButton,
+  IconButton, MenuItem, Menu,
   Typography
 } from "@mui/material";
 import JwtService from "../../client/jwt.service";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {Comments} from "./Comments";
+import {PrivateComponent} from "../PrivateComponent";
+import {FeedDispatchContext} from "../../containers/Feed";
+import {PostCardActions} from "../PostCardActions";
 
 export const Post = ({post}) => {
+  const {
+    triggerEdit,
+    deletePostHandler
+  } = React.useContext(FeedDispatchContext)
+
   const {email} = JwtService.getCurrentTokenPayload();
 
   return (
@@ -29,9 +37,15 @@ export const Post = ({post}) => {
           </Avatar>
         }
         action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon/>
-          </IconButton>
+          <PrivateComponent
+            componentUserId={post.userId}
+          >
+            <PostCardActions
+              handleEdit={(e) => triggerEdit(post.id, e)}
+              handleDelete={(e) => deletePostHandler(post.id, e)}
+            />
+          </PrivateComponent>
+
         }
         title={post.title}
         subheader={post.createdAt}
@@ -44,12 +58,12 @@ export const Post = ({post}) => {
       <CardActions disableSpacing>
 
       </CardActions>
-        <CardContent>
-          <Comments
-            postId={post.id}
-            addComment={false}
-          />
-        </CardContent>
+      <CardContent>
+        <Comments
+          postId={post.id}
+          addComment={true}
+        />
+      </CardContent>
     </Card>
   )
 }

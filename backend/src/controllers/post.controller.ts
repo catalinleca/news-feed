@@ -3,6 +3,7 @@ import {matchedData} from "express-validator";
 import Post from "../models/Post";
 import {NotFoundError} from "../utils/errors";
 import {getPaginationConditions, getQueryConditions} from "../utils";
+import Comment from "../models/Comment";
 
 export const createPostController = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -32,7 +33,10 @@ export const getPostsController = async (req: Request, res: Response, next: Next
       where: {
         ...whereConditions
       },
-      ...conditions
+      ...conditions,
+      order: [
+        ["updatedAt", "DESC"]
+      ]
     })
 
     return res.status(200).json(result);
@@ -65,6 +69,8 @@ export const getPostByIdController = async (req: Request, res: Response, next: N
 
 export const updatePostController = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    let updatedPost;
+
     const {title, description: body} = matchedData(req);
 
     const userId = +req.params.userId || req.currentUser!.userId;
@@ -80,7 +86,13 @@ export const updatePostController = async (req: Request, res: Response, next: Ne
       }
     })
 
-    return res.status(201).json(result);
+    if (result[0] === 1) {
+      updatedPost = await Post.findByPk(postId)
+    } else {
+      updatedPost = result
+    }
+
+    return res.status(201).json(updatedPost);
   } catch (err) {
     next(err)
   }

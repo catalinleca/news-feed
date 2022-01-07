@@ -1,5 +1,3 @@
-import {Posts} from "../../components";
-import { AddPost } from "../../components";
 import {Feed} from "../../containers/Feed";
 
 const HomePage = () => {

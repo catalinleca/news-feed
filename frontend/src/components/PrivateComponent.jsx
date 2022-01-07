@@ -1,5 +1,5 @@
 import React from "react";
-import {useAuthState} from "../context/context";
+import {useAuthState} from "../context/auth/authContext";
 
 export const PrivateComponent = ({componentUserId, children}) => {
   const state = useAuthState();
