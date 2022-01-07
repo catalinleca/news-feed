@@ -136,8 +136,7 @@ export const Feed = () => {
           isLoading={isLoading}
           setLoader={setLoader}
         />
-        {
-          isModalOpen && <AddEditPostDialog
+          <AddEditPostDialog
             isOpen={isModalOpen}
             handleClose={() => {
               setActivePost(null)
@@ -146,7 +145,6 @@ export const Feed = () => {
             defaultValues={activePostData}
             actionHandler={actionHandler}
           />
-        }
       </FeedDispatchContext.Provider>
     </Grid>
   )
