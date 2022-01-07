@@ -1,4 +1,6 @@
-export { Post } from "./Post";
-export { Posts } from "./Posts";
-export { Comment } from "./Comment";
-export { Comments } from "./Comments";
+export * from "./AddComment"
+export * from "./AddPostTile"
+export * from "./Comment";
+export * from "./Comments"
+export * from "./Post";
+export * from "./Posts";

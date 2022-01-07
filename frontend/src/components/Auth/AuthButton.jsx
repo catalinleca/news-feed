@@ -1,7 +1,7 @@
 import * as React from "react"
 import {Alert, Button, Grid} from "@mui/material";
 
-const AuthButton = ({label, clickHandler, errors = []}) => {
+export const AuthButton = ({label, clickHandler, errors = []}) => {
 
   const errorMessage = (error, i) => (
     <Alert key={errors.message + i} severity="error">{error.message}</Alert>
@@ -38,5 +38,3 @@ const AuthButton = ({label, clickHandler, errors = []}) => {
     </React.Fragment>
   )
 }
-
-export default AuthButton;

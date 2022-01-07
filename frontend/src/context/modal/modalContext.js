@@ -1,7 +1,6 @@
 import * as React from "react";
 import {useCallback, useState} from "react";
-import {Modals} from "../../components/Modals";
-import AlertDialog from "../../components/Modals/AlertDialog";
+import {AlertDialog, Modals} from "../../components";
 
 export const ModalStateContext = React.createContext({})
 export const ModalDispatchContext = React.createContext({})
@@ -46,7 +45,6 @@ export const ModalProvider = ({children}) => {
   }, [])
 
   const handleOpenModal = useCallback(({componentName, staticProps}) => {
-    console.log("modal props: ", staticProps)
     setComponentName(componentName)
     setModalProps(staticProps)
     setIsOpen(true)

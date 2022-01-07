@@ -1,11 +1,9 @@
-import {Feed} from "../../containers/Feed";
+import {Feed} from "../../containers";
 
-const HomePage = () => {
+export const HomePage = () => {
   return (
     <div>
       <Feed/>
     </div>
   )
 }
-
-export default HomePage;

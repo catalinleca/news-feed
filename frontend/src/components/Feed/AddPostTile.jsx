@@ -1,5 +1,4 @@
 import {Card, Grid, TextField} from "@mui/material";
-import * as React from "react";
 
 export const AddPostTile = ({clickHandler}) => {
   return (

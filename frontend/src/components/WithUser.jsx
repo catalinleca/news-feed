@@ -1,5 +1,5 @@
-import * as React from "react";
-import {useAuthState} from "../context/auth/authContext";
+import React from "react";
+import {useAuthState} from "../context";
 
 export const WithUser = ({children}) => {
   const state = useAuthState();

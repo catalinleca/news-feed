@@ -25,7 +25,7 @@ export const baseFormValidationSchema = {
 /**
  * get rid of all the typographies at the end
  */
-const BaseRegisterForm = ({useFormProps: {register, errors}}) => (
+export const BaseRegisterForm = ({useFormProps: {register, errors}}) => (
   <React.Fragment>
     <Grid
       container
@@ -105,6 +105,3 @@ const BaseRegisterForm = ({useFormProps: {register, errors}}) => (
     </Grid>
   </React.Fragment>
 )
-
-
-export default BaseRegisterForm;

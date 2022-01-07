@@ -1,7 +1,6 @@
+import React, {useMemo, useState} from "react";
 import {Button, Grid, Paper, TextField} from "@mui/material";
-import * as React from "react";
 import {useForm} from "react-hook-form";
-import {useMemo, useState} from "react";
 
 export const AddComment = ({addComment}) => {
   const [title, setTitle] = useState("")

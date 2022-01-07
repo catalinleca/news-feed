@@ -29,7 +29,7 @@ export const EditableField = ({value, setValue, name, textFieldProps, isEditable
     return () => {
       window.removeEventListener('keydown', handleEsc);
     };
-  }, [isFocused, isEditable])
+  }, [isFocused, isEditable, handleEsc])
 
   const onKeyPressHandler = (e, name) => {
     const newVal = e.target.value;
@@ -59,7 +59,7 @@ export const EditableField = ({value, setValue, name, textFieldProps, isEditable
       size="small"
       autoFocus
       defaultValue={value}
-      onBlur={event => setIsFocused(false)}
+      onBlur={() => setIsFocused(false)}
       onKeyPress={(e) => onKeyPressHandler(e, name)}
       {...textFieldProps}
     />

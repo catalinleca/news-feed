@@ -1,8 +1,6 @@
-import React, {forwardRef, useCallback, useRef, useState} from "react";
+import React, {forwardRef} from "react";
 import {CircularProgress, Grid} from "@mui/material";
-import {Post} from "./Post";
-import appClient from "../../client/appClient";
-import {useProgressiveRequest} from "../../hooks/useProgressiveRequest";
+import {Post} from "./";
 
 const PostWrapper = forwardRef(({post}, ref) => (
   <Grid

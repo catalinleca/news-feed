@@ -1,7 +1,6 @@
-import * as React from "react";
+import React, {useEffect, useState} from "react";
 import * as Yup from "yup";
 import {Autocomplete, Grid, MenuItem, TextField, Typography} from "@mui/material";
-import {useEffect, useState} from "react";
 import appClient from "../../client/appClient";
 
 export const userDetailsValidationSchema = {
@@ -17,7 +16,7 @@ export const userDetailsValidationSchema = {
     .required('Company is required')
 }
 
-const UserDetailsRegisterForum = ({useFormProps: {register, errors, setValue}}) => {
+export const UserDetailsRegisterForm = ({useFormProps: {register, errors, setValue}}) => {
   const [companyOptions, setCompanyOptions] = useState([])
 
   useEffect(() => {
@@ -109,7 +108,4 @@ const UserDetailsRegisterForum = ({useFormProps: {register, errors, setValue}}) 
       </Grid>
     </React.Fragment>
   )
-
 }
-
-export default UserDetailsRegisterForum;

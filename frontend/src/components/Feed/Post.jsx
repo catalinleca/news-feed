@@ -1,19 +1,16 @@
-import * as React from "react";
+import React from "react";
 import {
   Avatar,
   Card,
   CardActions,
   CardContent,
   CardHeader,
-  IconButton, MenuItem, Menu,
   Typography
 } from "@mui/material";
 import JwtService from "../../client/jwt.service";
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import {Comments} from "./Comments";
-import {PrivateComponent} from "../PrivateComponent";
+import {Comments} from "./";
+import {PrivateComponent, PostCardActions} from "../";
 import {FeedDispatchContext} from "../../containers/Feed";
-import {PostCardActions} from "../PostCardActions";
 
 export const Post = ({post}) => {
   const {

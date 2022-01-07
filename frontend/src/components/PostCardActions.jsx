@@ -1,8 +1,7 @@
-import * as React from "react";
-import {Fragment} from "react";
+import React from "react";
 import {IconButton, Menu, MenuItem} from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import {ModalDispatchContext, useModalDispatch} from "../context/modal/modalContext";
+import {ModalDispatchContext} from "../context";
 import {Modals} from "./Modals";
 
 export const PostCardActions = ({handleEdit, handleDelete}) => {
@@ -37,7 +36,7 @@ export const PostCardActions = ({handleEdit, handleDelete}) => {
   }
 
   return (
-    <Fragment>
+    <React.Fragment>
       <IconButton
         aria-label="settings"
         aria-controls={open ? 'action-menu' : undefined}
@@ -56,6 +55,6 @@ export const PostCardActions = ({handleEdit, handleDelete}) => {
         <MenuItem onClick={editHandler}>Edit</MenuItem>
         <MenuItem onClick={deleteHandler}>Delete</MenuItem>
       </Menu>
-    </Fragment>
+    </React.Fragment>
   )
 }

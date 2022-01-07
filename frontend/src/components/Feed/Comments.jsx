@@ -1,11 +1,8 @@
-import {useCallback, useState} from "react";
-import {Button, Card, Grid, IconButton, LinearProgress, List, Paper, TextField, Typography} from "@mui/material";
-import {Comment} from "./Comment";
+import React, {useCallback, useState} from "react";
+import {Button, Grid, LinearProgress, List, Typography} from "@mui/material";
+import {Comment, AddComment} from "./";
 import appClient from "../../client/appClient";
-import * as React from "react";
-import {useProgressiveRequest} from "../../hooks/useProgressiveRequest";
-import {AddComment} from "../AddComment";
-import JwtService from "../../client/jwt.service";
+import {useProgressiveRequest} from "../../hooks";
 
 export const Comments = ({postId, addComment}) => {
   const [page, setPage] = useState(1)
@@ -57,7 +54,7 @@ export const Comments = ({postId, addComment}) => {
       })
 
       setComments(newComments)
-    } catch(err) {
+    } catch (err) {
       console.error("Handle me - Could not update Comment")
     }
   }
@@ -75,7 +72,7 @@ export const Comments = ({postId, addComment}) => {
       const newComments = comments.filter(({id}) => id !== commentId)
 
       setComments(newComments)
-    } catch(err) {
+    } catch (err) {
       console.error("Handle me - Could not delete Comment")
     }
   }
@@ -88,7 +85,7 @@ export const Comments = ({postId, addComment}) => {
 
       const newComment = response.data;
       setComments([...comments, newComment])
-    } catch(err) {
+    } catch (err) {
       console.error("Handle me - Could not add Comment")
     }
   }
@@ -126,9 +123,9 @@ export const Comments = ({postId, addComment}) => {
                     >
                       Load more comments
                     </Button>
-                  ) : ( isLoading && (
+                  ) : (isLoading && (
                     <Grid>
-                      <LinearProgress />
+                      <LinearProgress/>
                     </Grid>
                   ))
                 }

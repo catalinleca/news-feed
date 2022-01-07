@@ -1,21 +1,23 @@
 import * as Yup from "yup";
-import * as React from "react";
+import React, {useState} from "react";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {Box, Grid, Paper, Typography} from "@mui/material";
-import BaseRegisterForm, {baseFormValidationSchema} from "./BaseRegisterForm";
-import UserDetailsRegisterForm, {userDetailsValidationSchema} from "./UserDetailsRegisterForm";
-import {useState} from "react";
-import AddressRegisterForm from "./AddressRegisterForm";
 import appClient from "../../client/appClient";
-import AuthButton from "../../components/AuthButton";
+import {
+  AddressRegisterForm, AuthButton,
+  baseFormValidationSchema,
+  BaseRegisterForm,
+  UserDetailsRegisterForm,
+  userDetailsValidationSchema
+} from "../../components";
 
 const validationSchema = Yup.object().shape({
   ...baseFormValidationSchema,
   ...userDetailsValidationSchema
 })
 
-const RegisterPage = (props) => {
+export const RegisterPage = (props) => {
   const {
     register,
     control,
@@ -108,4 +110,3 @@ const RegisterPage = (props) => {
   )
 }
 
-export default RegisterPage;

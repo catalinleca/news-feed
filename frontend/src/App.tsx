@@ -1,9 +1,7 @@
-import React from 'react';
 import {BrowserRouter, Redirect, Route, Switch} from 'react-router-dom';
 import './App.css';
-import {Layout, PrivateRoute} from "./components";
-import {AuthProvider} from './context/auth/authContext';
-import {ModalProvider} from './context/modal/modalContext';
+import {Layout, PrivateRoute} from './components';
+import {AuthProvider, ModalProvider} from './context';
 import {HomePage, LoginPage, RegisterPage} from "./views";
 
 function App() {

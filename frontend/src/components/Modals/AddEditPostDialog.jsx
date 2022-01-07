@@ -1,9 +1,8 @@
-import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from "@mui/material";
+import React from "react";
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from "@mui/material";
 import {useForm} from "react-hook-form";
-import * as React from "react";
-import {FeedDispatchContext} from "../../containers/Feed";
 
-export const AddPostForm = ({isOpen, handleClose, actionHandler, defaultValues = {}}) => {
+export const AddEditPostDialog = ({isOpen, handleClose, actionHandler, defaultValues = {}}) => {
   const {
     title = "", body: description = ""
   } = defaultValues

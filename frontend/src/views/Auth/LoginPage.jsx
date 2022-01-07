@@ -1,12 +1,11 @@
 import * as Yup from "yup";
-import * as React from "react";
+import React, {useState} from "react";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {Box, Grid, Paper, TextField, Typography} from "@mui/material";
 import appClient from "../../client/appClient";
-import AuthButton from "../../components/AuthButton";
-import {useState} from "react";
-import {AuthDispatchContext} from "../../context/auth/authContext";
+import {AuthDispatchContext} from "../../context";
+import {AuthButton} from "../../components";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -18,7 +17,7 @@ const validationSchema = Yup.object().shape({
     .max(40, 'Password must not exceed 40 characters'),
 })
 
-const LoginPage = (props) => {
+export const LoginPage = (props) => {
   const [errorsMessages, setErrorsMessages] = useState([])
   const dispatch = React.useContext(AuthDispatchContext);
 
@@ -110,5 +109,3 @@ const LoginPage = (props) => {
     </React.Fragment>
   )
 }
-
-export default LoginPage;

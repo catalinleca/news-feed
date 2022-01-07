@@ -15,7 +15,7 @@ export const baseFormValidationSchema = {
     .required('Suite is required'),
 }
 
-const AddressRegisterForm = ({useFormProps: {register, control, errors}}) => (
+export const AddressRegisterForm = ({useFormProps: {register, errors}}) => (
   <React.Fragment>
     <Grid
       container
@@ -87,6 +87,3 @@ const AddressRegisterForm = ({useFormProps: {register, control, errors}}) => (
     </Grid>
   </React.Fragment>
 )
-
-
-export default AddressRegisterForm;

@@ -1,18 +1,15 @@
+import React, {useState} from "react";
 import {
-  Avatar, createStyles,
+  Avatar,
   Divider,
   Grid, IconButton,
   ListItem,
   ListItemAvatar,
-  ListItemText, makeStyles, TextField,
+  ListItemText,
   Typography
 } from "@mui/material";
-import * as React from "react";
-import {useState} from "react";
-import {EditableField} from "../EditableField";
 import DeleteIcon from '@mui/icons-material/Delete';
-import {PrivateComponent} from "../PrivateComponent";
-import {WithUser} from "../WithUser";
+import {PrivateComponent, WithUser, EditableField} from "../";
 
 const MAX_COMMENT = 100;
 

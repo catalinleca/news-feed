@@ -1,5 +1,2 @@
-export {default as LoginPage} from "./LoginPage"
-export {default as RegisterPage} from "./RegisterPage"
-export {default as BaseRegisterForm} from "./BaseRegisterForm"
-export {default as AddressRegisterForm} from "./AddressRegisterForm"
-export {default as UserDetailsRegisterForm} from "./UserDetailsRegisterForm"
+export * from "./LoginPage"
+export * from "./RegisterPage"

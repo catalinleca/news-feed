@@ -1,9 +1,8 @@
-import {AddPostTile, Posts} from "../components";
-import {Grid} from "@mui/material";
 import React, {useCallback, useMemo, useState} from "react";
+import {Grid} from "@mui/material";
 import appClient from "../client/appClient";
-import {useProgressiveRequest} from "../hooks/useProgressiveRequest";
-import {AddPostForm} from "../components/Modals/AddPostForm";
+import {AddPostTile, Posts, AddEditPostDialog} from "../components";
+import {useProgressiveRequest} from "../hooks";
 
 export const FeedDispatchContext = React.createContext({});
 export const FeedStateContext = React.createContext({})
@@ -113,7 +112,9 @@ export const Feed = () => {
     }
   }
 
-  const activePostData = useMemo(() => posts.find(({id}) => id === activePost ), [activePost])
+  const activePostData = useMemo(() => posts.find(({id}) => id === activePost ), [posts, activePost])
+
+  console.log("activePostData: ", activePostData);
 
   return (
     <Grid
@@ -135,15 +136,17 @@ export const Feed = () => {
           isLoading={isLoading}
           setLoader={setLoader}
         />
-        <AddPostForm
-          isOpen={isModalOpen}
-          handleClose={() => {
-            setActivePost(null)
-            setIsModalOpen(false)
-          }}
-          defaultValues={activePostData}
-          actionHandler={actionHandler}
-        />
+        {
+          isModalOpen && <AddEditPostDialog
+            isOpen={isModalOpen}
+            handleClose={() => {
+              setActivePost(null)
+              setIsModalOpen(false)
+            }}
+            defaultValues={activePostData}
+            actionHandler={actionHandler}
+          />
+        }
       </FeedDispatchContext.Provider>
     </Grid>
   )

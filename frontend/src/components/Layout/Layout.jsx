@@ -1,7 +1,5 @@
-import * as React from "react";
-import { Header } from "./Header";
 import { Grid } from "@mui/material";
-import { Body } from "./Body";
+import { Body, Header } from "./";
 
 export const Layout = ({ children, ...rest }) => {
   return (

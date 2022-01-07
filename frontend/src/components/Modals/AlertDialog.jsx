@@ -6,7 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-export default function AlertDialog({isOpen, handleClose, onAccept, onDeny, message, title}) {
+export const AlertDialog = ({isOpen, handleClose, onAccept, onDeny, message, title}) => {
   const handleAccept = () => {
     onAccept()
     handleClose();
