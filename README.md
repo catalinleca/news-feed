@@ -11,7 +11,7 @@ npm run start
 
 After the server has started open a new terminal window (in root of 'backend' folder) and run
 
-`npm run db:seeds:all`
+`npm run seeds:all`
 
 This will populate the database with some dummy data and 2 users
 1. test@mail.com / 12345678
