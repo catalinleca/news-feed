@@ -19,6 +19,10 @@ export const Header = () => {
     history.push('/login')
   }
 
+  const loginHandler = () => {
+    history.push('/login')
+  }
+
   const registerHandler = () => {
     history.push('/register')
   }
@@ -34,6 +38,17 @@ export const Header = () => {
     </Button>
   )
 
+  const loginButton = (
+    <Button
+      onClick={loginHandler}
+      style={{
+        color: "white"
+      }}
+    >
+      Login
+    </Button>
+  )
+
   const registerButton = (
     <Button
       onClick={registerHandler}
@@ -46,7 +61,7 @@ export const Header = () => {
   )
 
 
-  const actionButton = state.isLoggedIn ? logoutButton : registerButton;
+  const actionButton = state.isLoggedIn ? logoutButton : (<Grid>{loginButton}{registerButton}</Grid>);
 
   return (
     <Box sx={{ flexGrow: 1 }}>

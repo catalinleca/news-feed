@@ -9,7 +9,6 @@ export const createPostController = async (req: Request, res: Response, next: Ne
   try {
     const {title, description: body} = matchedData(req);
 
-    /** TBD: unsafe. Make secure later */
     const userId = +req.params.userId || req.currentUser!.userId;
 
     const result = await Post.create({
@@ -35,7 +34,7 @@ export const getPostsController = async (req: Request, res: Response, next: Next
       },
       ...conditions,
       order: [
-        ["updatedAt", "DESC"]
+        ["createdAt", "DESC"]
       ]
     })
 

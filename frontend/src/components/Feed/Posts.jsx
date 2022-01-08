@@ -1,5 +1,5 @@
 import React, {forwardRef} from "react";
-import {CircularProgress, Grid} from "@mui/material";
+import {Grid} from "@mui/material";
 import {Post} from "./";
 
 const PostWrapper = forwardRef(({post}, ref) => (
@@ -18,7 +18,7 @@ const PostWrapper = forwardRef(({post}, ref) => (
   </Grid>
 ))
 
-export const Posts = ({posts, isLoading, setLoader}) => {
+export const Posts = ({posts, setLoader}) => {
   return (
     <Grid
       container
@@ -27,23 +27,11 @@ export const Posts = ({posts, isLoading, setLoader}) => {
       {posts && posts.map((post, index) => (
           <PostWrapper
             ref={posts.length === index + 1 ? setLoader : null}
-            key={`${post?.id}${index}`}
+            key={post.id + post.title}
             post={post}
           />
         )
       )}
-      <br/>
-      {
-        isLoading && (
-          <Grid
-            container
-            justifyContent="center"
-            spacing={1}
-            mt={2}
-          >
-            <CircularProgress/>
-          </Grid>
-        )}
     </Grid>
 
   )

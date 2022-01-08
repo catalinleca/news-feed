@@ -1,15 +1,15 @@
 import React, {useCallback, useMemo, useState} from "react";
 import {Grid} from "@mui/material";
 import appClient from "../client/appClient";
-import {AddPostTile, Posts, AddEditPostDialog} from "../components";
+import {AddPostTile, Posts, AddEditPostDialog, PostLoader} from "../components";
 import {useProgressiveRequest} from "../hooks";
 
-export const FeedDispatchContext = React.createContext({});
-export const FeedStateContext = React.createContext({})
+export const FeedContext = React.createContext({});
 
 export const Feed = () => {
   const [activePost, setActivePost] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activePostLoading, setActivePostLoading] = useState(null);
 
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(5);
@@ -49,7 +49,7 @@ export const Feed = () => {
 
       const newPost = response.data;
 
-      setPosts([newPost, ...posts])
+      setPosts([...posts.slice(0, posts.length - 1), newPost])
     } catch (err) {
       console.error("Handle me - Could not add Post")
     }
@@ -61,19 +61,18 @@ export const Feed = () => {
   }
 
   const updatePostHandler = async (postData) => {
-    console.log("postData: ", postData);
-    console.log("postId: ", activePost);
     try {
       if (!activePost) {
         console.error("Handle me - Could not delete Post")
         return
       }
 
+      setActivePostLoading(activePost)
+
       const response = await appClient.posts.update(+activePost, {
         ...postData
       })
 
-      console.log("update response: ", response);
       if (response.data[0] === 0) {
         console.error("Handle me - Could not delete Post")
         return
@@ -90,6 +89,7 @@ export const Feed = () => {
       })
 
       setPosts(newPosts)
+      setActivePostLoading(null)
     } catch(err) {
       console.error("Handle me - Could not update Comment")
     }
@@ -114,7 +114,12 @@ export const Feed = () => {
 
   const activePostData = useMemo(() => posts.find(({id}) => id === activePost ), [posts, activePost])
 
-  console.log("activePostData: ", activePostData);
+  const sortedPosts = useMemo(() => {
+    return posts.sort(function (a, b) {
+      return new Date(b.createdAt) - new Date(a.createdAt)
+    })
+  }, [posts])
+
 
   return (
     <Grid
@@ -122,8 +127,9 @@ export const Feed = () => {
       alignItems="center"
       justifyContent="center"
     >
-      <FeedDispatchContext.Provider
+      <FeedContext.Provider
         value={{
+          activePostLoading,
           triggerEdit,
           deletePostHandler
         }}
@@ -132,20 +138,22 @@ export const Feed = () => {
           clickHandler={() => setIsModalOpen(true)}
         />
         <Posts
-          posts={posts}
-          isLoading={isLoading}
+          posts={sortedPosts}
           setLoader={setLoader}
         />
-          <AddEditPostDialog
-            isOpen={isModalOpen}
-            handleClose={() => {
-              setActivePost(null)
-              setIsModalOpen(false)
-            }}
-            defaultValues={activePostData}
-            actionHandler={actionHandler}
-          />
-      </FeedDispatchContext.Provider>
+        <AddEditPostDialog
+          isOpen={isModalOpen}
+          handleClose={() => {
+            setActivePost(null)
+            setIsModalOpen(false)
+          }}
+          defaultValues={activePostData}
+          actionHandler={actionHandler}
+        />
+        {
+          isLoading && [1,2,3].map(i => <PostLoader key={i}/>)
+        }
+      </FeedContext.Provider>
     </Grid>
   )
 }

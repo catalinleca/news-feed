@@ -6,9 +6,6 @@ import sequelize from "../utils/db";
 import {LoginUserDto} from "../services/user/dto";
 import AuthService from "../services/auth";
 
-/**
- * TBD: Change response. Auto login on signup
- */
 export const signUpController = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const payload = matchedData(req) as UserCreationAttributes

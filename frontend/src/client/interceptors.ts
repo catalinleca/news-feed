@@ -3,9 +3,9 @@ import AppClient from "./index";
 import JwtService, {IAuthTokens} from "./jwt.service";
 
 export const requestFulfilledAuthInterceptor = ({
-                                           header = "authorization",
-                                           headerPrefix = "Bearer",
-                                         } = {}) =>
+                                                  header = "authorization",
+                                                  headerPrefix = "Bearer",
+                                                } = {}) =>
   (reqConfig: AxiosRequestConfig): AxiosRequestConfig => {
 
     const accessToken = JwtService.getLocalAccessToken()
@@ -17,13 +17,10 @@ export const requestFulfilledAuthInterceptor = ({
   }
 
 export const responseRejectedAuthInterceptor = ({
-                                           appClient
-                                         }: {
+                                                  appClient
+                                                }: {
   appClient: AppClient
 }) => async (err: any) => {
-  console.log("err: ", err);
-  console.log("err.response: ", err.response);
-
   const originalConfig = err.config;
 
   if (originalConfig !== "/auth/signin" && err.response) {

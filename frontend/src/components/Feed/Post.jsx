@@ -2,23 +2,30 @@ import React from "react";
 import {
   Avatar,
   Card,
-  CardActions,
   CardContent,
-  CardHeader,
+  CardHeader, Grid,
   Typography
 } from "@mui/material";
-import JwtService from "../../client/jwt.service";
-import {Comments} from "./";
-import {PrivateComponent, PostCardActions} from "../";
-import {FeedDispatchContext} from "../../containers/Feed";
+import {PrivateComponent, PostCardActions, PostLoader} from "../";
+import {FeedContext} from "../../containers/Feed";
+import {Comments} from "../../containers";
 
 export const Post = ({post}) => {
   const {
+    activePostLoading,
     triggerEdit,
     deletePostHandler
-  } = React.useContext(FeedDispatchContext)
+  } = React.useContext(FeedContext)
 
-  const {email} = JwtService.getCurrentTokenPayload();
+  if (activePostLoading === post.id) {
+    return (
+      <PostLoader
+        sx={{
+          display: "contents"
+        }}
+      />
+    )
+  }
 
   return (
     <Card sx={{width: 645}}>
@@ -29,9 +36,7 @@ export const Post = ({post}) => {
               backgroundColor: "orange"
             }}
             aria-label="recipe"
-          >
-            {email && email[0].toUpperCase()}
-          </Avatar>
+          />
         }
         action={
           <PrivateComponent
@@ -47,18 +52,23 @@ export const Post = ({post}) => {
         title={post.title}
         subheader={post.createdAt}
       />
-      <CardContent>
-        <Typography variant="body2" color="text.secondary">
-          {post.body}
-        </Typography>
-      </CardContent>
-      <CardActions disableSpacing>
 
-      </CardActions>
+      <CardContent>
+        <Grid>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{
+              overflowWrap: "break-word"
+            }}
+          >
+            {post.body}
+          </Typography>
+        </Grid>
+      </CardContent>
       <CardContent>
         <Comments
           postId={post.id}
-          addComment={true}
         />
       </CardContent>
     </Card>

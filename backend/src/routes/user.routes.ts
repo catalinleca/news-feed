@@ -5,7 +5,6 @@ import {postRouter} from "./post.routes";
 
 const userRouter = express.Router();
 
-/** TBD: Try to make on controller for getAllData(User, id) where id column in User */
 userRouter.get("/users", verifyToken, getUsersController)
 
 userRouter.get("/users/:userId", verifyToken, getUserByIdController)

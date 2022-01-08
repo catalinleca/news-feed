@@ -2,7 +2,6 @@ import * as React from "react"
 import {Alert, Button, Grid} from "@mui/material";
 
 export const AuthButton = ({label, clickHandler, errors = []}) => {
-
   const errorMessage = (error, i) => (
     <Alert key={errors.message + i} severity="error">{error.message}</Alert>
   )

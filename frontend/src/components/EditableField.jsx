@@ -2,14 +2,14 @@ import * as React from "react";
 import {Grid, TextField, Typography} from "@mui/material";
 import {useCallback, useEffect} from "react";
 
-export const EditableField = ({value, setValue, name, textFieldProps, isEditable = true, children, childrenWrapper: ChildrenWrapper}) => {
+export const EditableField = ({value, setValue, name, textFieldProps, isEditable = true, children, childrenWrapper: ChildrenWrapper, gridProps}) => {
   const [isFocused, setIsFocused] = React.useState(false);
   const Component = ChildrenWrapper || Grid
 
   const defaultValueWrapperProps = isEditable ? {
     onClick: () => setIsFocused(true),
     sx: {
-      cursor: 'pointer'
+      cursor: 'pointer',
     }
   } : {}
 
@@ -71,6 +71,7 @@ export const EditableField = ({value, setValue, name, textFieldProps, isEditable
     <Grid
       container={true}
       alignItems="flex-start"
+      {...gridProps}
     >
       {
         !isFocused

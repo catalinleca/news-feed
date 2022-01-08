@@ -8,10 +8,8 @@ export const baseFormValidationSchema = {
     .min(6, 'Street must be at least 6 characters')
     .max(40, 'Street must not exceed 20 characters'),
   city: Yup.string()
-    .required('City is required')
-    .email('City is invalid'),
-  suite: Yup.number()
-    .typeError('Suite is required')
+    .required('City is required'),
+  suite: Yup.string()
     .required('Suite is required'),
 }
 
@@ -34,7 +32,7 @@ export const AddressRegisterForm = ({useFormProps: {register, errors}}) => (
             required
             id="street"
             name="street"
-            label="Street"
+            label="Make sure you enter a valid street and no"
             fullWidth
             margin="dense"
             {...register('street')}

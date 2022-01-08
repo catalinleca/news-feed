@@ -1,12 +1,13 @@
 import React, {useCallback, useState} from "react";
 import {Button, Grid, LinearProgress, List, Typography} from "@mui/material";
-import {Comment, AddComment} from "./";
-import appClient from "../../client/appClient";
-import {useProgressiveRequest} from "../../hooks";
+import {Comment, AddComment} from "../components";
+import appClient from "../client/appClient";
+import {useProgressiveRequest} from "../hooks";
 
-export const Comments = ({postId, addComment}) => {
+export const Comments = ({postId}) => {
   const [page, setPage] = useState(1)
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(3);
+  const [activeLoadingComment, setActiveLoadingComment] = useState(null);
 
   const apiCall = useCallback(() => appClient.comments.getAllWithQueryParams({
     postId,
@@ -32,12 +33,11 @@ export const Comments = ({postId, addComment}) => {
 
   const updateCommentHandler = (commentId) => async (val, name) => {
     try {
-      /** TBD move down and add loader */
+      setActiveLoadingComment(commentId);
       const response = await appClient.comments.update(commentId, {
         [name]: val
       })
 
-      console.log("update response: ", response);
       if (response.data[0] === 0) {
         console.error("Handle me - Could not delete Comment")
         return
@@ -54,14 +54,14 @@ export const Comments = ({postId, addComment}) => {
       })
 
       setComments(newComments)
+      setActiveLoadingComment(null);
     } catch (err) {
-      console.error("Handle me - Could not update Comment")
+      console.error("Handle me - Could not update Comment", err)
     }
   }
 
   const deleteCommentHandler = (commentId) => async () => {
     try {
-      /** TBD move down and add loader */
       const response = await appClient.comments.deleteById(commentId)
 
       if (response[0] === 0) {
@@ -73,7 +73,7 @@ export const Comments = ({postId, addComment}) => {
 
       setComments(newComments)
     } catch (err) {
-      console.error("Handle me - Could not delete Comment")
+      console.error("Handle me - Could not delete Comment", err)
     }
   }
 
@@ -86,7 +86,7 @@ export const Comments = ({postId, addComment}) => {
       const newComment = response.data;
       setComments([...comments, newComment])
     } catch (err) {
-      console.error("Handle me - Could not add Comment")
+      console.error("Handle me - Could not add Comment", err)
     }
   }
 
@@ -107,10 +107,11 @@ export const Comments = ({postId, addComment}) => {
                 {
                   comments.map((comment, index) => (
                     <Comment
-                      key={`${comment.id}${index}`}
+                      key={`${comment.id}${comment.name}`}
                       comment={comment}
                       updateComment={updateCommentHandler}
                       deleteComment={deleteCommentHandler}
+                      activeLoadingComment={activeLoadingComment}
                     />
                   ))
                 }
@@ -134,13 +135,9 @@ export const Comments = ({postId, addComment}) => {
             : (<Typography variant="caption">No comments</Typography>)
         }
       </List>
-      {
-        addComment && (
-          <AddComment
-            addComment={addCommentHandler}
-          />
-        )
-      }
+      <AddComment
+        addComment={addCommentHandler}
+      />
     </Grid>
   )
 }

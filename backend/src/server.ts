@@ -3,11 +3,9 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import sequelize from "./utils/db";
 import createAssociations from "./utils/associations";
-import {authRouter, companyRouter, postRouter} from "./routes";
+import {authRouter, companyRouter, postRouter, userRouter, commentRouter} from "./routes";
 import "dotenv/config";
 import {errorHandler} from "./middlewares";
-import {userRouter} from "./routes/user.routes";
-import {commentRouter} from "./routes/comment.routes";
 
 const app = express();
 

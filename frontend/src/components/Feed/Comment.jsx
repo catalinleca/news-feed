@@ -9,11 +9,11 @@ import {
   Typography
 } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
-import {PrivateComponent, WithUser, EditableField} from "../";
+import {PrivateComponent, WithUser, EditableField, CommentLoader} from "../";
 
 const MAX_COMMENT = 100;
 
-export const Comment = ({comment, updateComment, deleteComment}) => {
+export const Comment = ({comment, updateComment, deleteComment, activeLoadingComment}) => {
   const [readMore, setReadMore] = useState(comment.body.length > MAX_COMMENT);
   const [colors, _] = useState(`${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)}`)
   const commentTooBig = comment.body.length > MAX_COMMENT;
@@ -21,6 +21,15 @@ export const Comment = ({comment, updateComment, deleteComment}) => {
   const readMoreToggle = (e) => {
     e.stopPropagation()
     setReadMore(prevState => !prevState)
+  }
+
+  if (activeLoadingComment === comment.id) {
+    return (
+      <React.Fragment>
+        <CommentLoader/>
+        <Divider/>
+      </React.Fragment>
+    )
   }
 
   return (
@@ -54,6 +63,7 @@ export const Comment = ({comment, updateComment, deleteComment}) => {
           {
             ({userId}) => (
               <ListItemText
+                disableTypography={true}
                 primary={
                   <EditableField
                     isEditable={userId === comment.userId}
@@ -65,7 +75,7 @@ export const Comment = ({comment, updateComment, deleteComment}) => {
                 secondary={
                   <Grid>
                     <Typography
-                      sx={{display: 'inline'}}
+                      sx={{display: 'inline', fontWeight: "bold", float: "left", marginTop: "1px", marginRight: "2px"}}
                       component="span"
                       variant="body2"
                       color="text.primary"
@@ -82,8 +92,15 @@ export const Comment = ({comment, updateComment, deleteComment}) => {
                         multiline: true,
                         maxRows: 4
                       }}
+                      gridProps={{
+                        sx: {
+                          display: "contents"
+                        }
+                      }}
                     >
-                      {readMore ? (comment.body.slice(0, MAX_COMMENT) + "...") : comment.body}
+                      <Typography variant="body2" sx={{display: "contents"}}>
+                        {readMore ? (comment.body.slice(0, MAX_COMMENT) + "...") : comment.body}
+                      </Typography>
                       <br/>
                       {
                         commentTooBig &&

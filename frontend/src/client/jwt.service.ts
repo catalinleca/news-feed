@@ -104,8 +104,6 @@ const isLoginValid = (): boolean => {
 
 const getCurrentTokenPayload = (): Partial<IDecodedToken> => {
   const decoded = decodeToken(getLocalAccessToken())
-  // console.log("decoded: ", decoded);
-  /** TBD: Multiple calls here because of context. Check from where. Not fron WithUser or PrivateComponent */
 
   return decoded || {}
 }

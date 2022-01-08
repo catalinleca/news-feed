@@ -15,11 +15,16 @@ export const AddEditPostDialog = ({isOpen, handleClose, actionHandler, defaultVa
     }
   }, [defaultValues?.title, defaultValues?.body]);
 
-
-  const disabledSubmit = useMemo(() => (
-    title.length === 0 && description.length === 0
-  ), [title, description])
   const isEdit = !!defaultValues
+
+  const disabledSubmit = useMemo(() => {
+    if (isEdit) {
+      return (title.length === 0 || description.length === 0)
+    } else {
+      return (title.length === 0 && description.length === 0)
+    }
+  }, [title, description, isEdit])
+
 
 
   const handleAction = (e) => {

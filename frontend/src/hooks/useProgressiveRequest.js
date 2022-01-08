@@ -57,6 +57,7 @@ export const useProgressiveRequest = (apiCall, page, limit, observerCallback) =>
     setData,
     isLoading,
     error,
-    setLoader
+    setLoader,
+    hasMore,
   };
 }

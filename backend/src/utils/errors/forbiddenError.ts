@@ -9,6 +9,6 @@ export class ForbiddenError extends BaseCustomError {
   }
 
   getErrors(): { message: string; field?: string }[] {
-    return [{ message: ForbiddenError.message}];
+    return [{ message: this.message}];
   }
 }

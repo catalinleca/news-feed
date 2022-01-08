@@ -2,13 +2,12 @@ import express, {NextFunction, Request, Response} from "express";
 import {validateRequest, verifyToken} from "../middlewares";
 import Comment from "../models/Comment";
 import {getPaginationConditions, getQueryConditions} from "../utils";
-import {where} from "sequelize";
 import {matchedData} from "express-validator";
 import { commentRules } from "../utils/rules";
 
 const commentRouter = express.Router({mergeParams: true});
 
-/** TBD: Refactor routes the right way in specailly comments */
+/** TBD: Refactor routes the right way */
 
 commentRouter.get("/comments", verifyToken, async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -21,7 +20,7 @@ commentRouter.get("/comments", verifyToken, async (req: Request, res: Response, 
       },
       ...conditions,
       order: [
-        ["updatedAt", "DESC"]
+        ["createdAt", "DESC"]
       ]
     })
 

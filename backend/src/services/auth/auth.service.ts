@@ -75,7 +75,6 @@ export default class AuthService {
   }
 
   checkAccessToken(token: string, next: NextFunction, successCb: any): void {
-    /** TBD: Catch jwt expired error */
     jwt.verify(token, this.secret as string, ((err, decode) => {
       if (err) {
         if (err instanceof TokenExpiredError) {
