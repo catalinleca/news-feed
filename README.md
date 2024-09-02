@@ -1,6 +1,5 @@
-# Genos App
-
 ## Getting started
+Small app that resemble a dynamic scrollable news feed with user interactions
 
 # Prerequisites
 ```
