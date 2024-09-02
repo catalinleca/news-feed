@@ -1,5 +1,5 @@
 ## Getting started
-Small app that resemble a dynamic scrollable news feed with user interactions
+Small app that resembles a dynamic scrollable news feed with user interactions
 
 # Prerequisites
 ```
